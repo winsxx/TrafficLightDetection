@@ -250,3 +250,8 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
+
+# Project Spesific
+data/
+!dll_unmanageable/x64/
+!dll_unmanageable/x86/
