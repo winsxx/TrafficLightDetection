@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TrafficLightDetectionUtil
+namespace TrafficLightDetectionUtil.TrafficLightColorSegmentation
 {
-    public interface TrafficLightColorSegmentation
+    public class TrafficLightSegmentationResult
     {
     }
 }
