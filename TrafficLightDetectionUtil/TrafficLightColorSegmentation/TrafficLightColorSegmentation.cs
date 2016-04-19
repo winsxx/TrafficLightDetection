@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Emgu.CV;
+using Emgu.CV.Structure;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +10,6 @@ namespace TrafficLightDetectionUtil
 {
     public interface TrafficLightColorSegmentation
     {
+        TrafficLightSegmentationResult[] doColorSegmentation(Image<Bgr, Byte> image);
     }
 }

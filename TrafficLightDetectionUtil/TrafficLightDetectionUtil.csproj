@@ -38,6 +38,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -52,8 +53,12 @@
     <Compile Include="TrafficLightColorSegmentation\BasicTrafficLightColorSegmentation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TrafficLightColorSegmentation\TrafficLightColorSegmentation.cs" />
+    <Compile Include="TrafficLightColorSegmentation\TrafficLightColorType.cs" />
     <Compile Include="TrafficLightShapeClassifier\HOGTrafficLightShapeClassifier.cs" />
     <Compile Include="TrafficLightShapeClassifier\TrafficLightShapeClassifier.cs" />
+    <Compile Include="TrafficLightColorSegmentation\TrafficLightSegmentationResult.cs" />
+    <Compile Include="TrafficLightElimination\TrafficLightElimination.cs" />
+    <Compile Include="TrafficLightTracking\TrafficLightTracking.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
