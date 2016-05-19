@@ -11,6 +11,8 @@
     <AssemblyName>TrafficLightDetectionUtil</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,7 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Emgu.CV.UI">
+    <Reference Include="Emgu.CV.UI, Version=3.0.0.2157, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\dll_manageable\Emgu.CV.UI.dll</HintPath>
     </Reference>
     <Reference Include="Emgu.CV.World">
@@ -39,6 +42,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -54,10 +58,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TrafficLightColorSegmentation\TrafficLightColorSegmentation.cs" />
     <Compile Include="TrafficLightColorSegmentation\TrafficLightColorType.cs" />
+    <Compile Include="TrafficLightElimination\TrafficLightEliminationBySize.cs" />
     <Compile Include="TrafficLightShapeClassifier\HOGTrafficLightShapeClassifier.cs" />
     <Compile Include="TrafficLightShapeClassifier\TrafficLightShapeClassifier.cs" />
     <Compile Include="TrafficLightColorSegmentation\TrafficLightSegmentationResult.cs" />
     <Compile Include="TrafficLightElimination\TrafficLightElimination.cs" />
+    <Compile Include="TrafficLightTracking\LucasKanadeTrafficLightTracking.cs" />
     <Compile Include="TrafficLightTracking\TrafficLightTracking.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

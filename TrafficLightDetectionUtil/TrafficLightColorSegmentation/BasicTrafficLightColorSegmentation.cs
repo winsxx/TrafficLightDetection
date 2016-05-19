@@ -32,7 +32,7 @@ namespace TrafficLightDetectionUtil
                 new Size((int)kernelSize, (int)kernelSize), new Point(-1, -1));
         }
 
-        public TrafficLightSegmentationResult[] doColorSegmentation(Image<Bgr, byte> image)
+        public TrafficLightSegmentationResult[] DoColorSegmentation(Image<Bgr, byte> image)
         {
             Image<Hsv, Byte> hsvImage = image.Convert<Hsv, Byte>();
 
@@ -73,8 +73,9 @@ namespace TrafficLightDetectionUtil
             foreach (CvBlob blob in resultingImageBlobs.Values)
             {
                 TrafficLightSegmentationResult segResult = new TrafficLightSegmentationResult();
-                segResult.region = blob.BoundingBox;
-                segResult.colorLabel = label;
+                segResult.Region = blob.BoundingBox;
+                segResult.ColorLabel = label;
+                colorDetectionResult.Add(segResult);
             }
 
             return (TrafficLightSegmentationResult[]) colorDetectionResult.ToArray(typeof(TrafficLightSegmentationResult));

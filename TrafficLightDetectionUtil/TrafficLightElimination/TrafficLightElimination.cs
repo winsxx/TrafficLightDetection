@@ -11,7 +11,7 @@ namespace TrafficLightDetectionUtil
 {
     public interface TrafficLightElimination
     {
-        TrafficLightSegmentationResult[] eliminate(
+        TrafficLightSegmentationResult[] Eliminate(
             Image<Bgr, byte> frame,
             TrafficLightSegmentationResult[] trafficLightSegmentationResults);
     }

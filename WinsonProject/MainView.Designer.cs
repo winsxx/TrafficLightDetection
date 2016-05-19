@@ -37,7 +37,7 @@
             // StartButton
             // 
             this.StartButton.BackColor = System.Drawing.SystemColors.Control;
-            this.StartButton.Location = new System.Drawing.Point(315, 293);
+            this.StartButton.Location = new System.Drawing.Point(576, 385);
             this.StartButton.Name = "StartButton";
             this.StartButton.Size = new System.Drawing.Size(75, 23);
             this.StartButton.TabIndex = 1;
@@ -47,9 +47,9 @@
             // 
             // CamImageBox
             // 
-            this.CamImageBox.Location = new System.Drawing.Point(12, 20);
+            this.CamImageBox.Location = new System.Drawing.Point(12, 12);
             this.CamImageBox.Name = "CamImageBox";
-            this.CamImageBox.Size = new System.Drawing.Size(378, 256);
+            this.CamImageBox.Size = new System.Drawing.Size(640, 360);
             this.CamImageBox.TabIndex = 2;
             this.CamImageBox.TabStop = false;
             // 
@@ -57,7 +57,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(402, 328);
+            this.ClientSize = new System.Drawing.Size(663, 420);
             this.Controls.Add(this.CamImageBox);
             this.Controls.Add(this.StartButton);
             this.Name = "MainView";

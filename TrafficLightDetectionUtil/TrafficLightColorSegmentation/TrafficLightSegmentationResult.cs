@@ -9,7 +9,7 @@ namespace TrafficLightDetectionUtil
 {
     public class TrafficLightSegmentationResult
     {
-        public Rectangle region {get; set;}
-        public TrafficLightColorType colorLabel { get; set; }
+        public Rectangle Region {get; set;}
+        public TrafficLightColorType ColorLabel { get; set; }
     }
 }

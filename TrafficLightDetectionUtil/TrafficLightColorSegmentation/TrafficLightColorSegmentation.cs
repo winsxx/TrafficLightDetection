@@ -10,6 +10,6 @@ namespace TrafficLightDetectionUtil
 {
     public interface TrafficLightColorSegmentation
     {
-        TrafficLightSegmentationResult[] doColorSegmentation(Image<Bgr, Byte> image);
+        TrafficLightSegmentationResult[] DoColorSegmentation(Image<Bgr, Byte> image);
     }
 }
