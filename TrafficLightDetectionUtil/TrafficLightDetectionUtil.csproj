@@ -64,6 +64,7 @@
     <Compile Include="TrafficLightColorSegmentation\TrafficLightSegmentationResult.cs" />
     <Compile Include="TrafficLightElimination\TrafficLightElimination.cs" />
     <Compile Include="TrafficLightTracking\LucasKanadeTrafficLightTracking.cs" />
+    <Compile Include="TrafficLightTracking\MeanShiftTrafficLightTracking.cs" />
     <Compile Include="TrafficLightTracking\TrafficLightTracking.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

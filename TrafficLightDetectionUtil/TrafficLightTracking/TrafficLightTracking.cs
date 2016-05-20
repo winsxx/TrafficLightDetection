@@ -16,5 +16,7 @@ namespace TrafficLightDetectionUtil
             Image<Bgr, byte> prevFrame,
             Image<Bgr, byte> currentFrame,
             Rectangle[] prevBoundingBox);
+
+        Rectangle[] ContinueTrack(Image<Bgr, byte> currentFrame);
     }
 }

@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using Emgu.CV;
 using Emgu.CV.Structure;
-using Emgu.Util;
 using TrafficLightDetectionUtil;
+using System.Threading;
 
 namespace WinsonProject
 {
@@ -28,7 +23,7 @@ namespace WinsonProject
         private int trackingCountDown;
         private bool useTracking;
 
-        private const int TL_REDETECT_CYCLE = 30;
+        private const int TL_REDETECT_CYCLE = 100;
 
         public MainView()
         {
@@ -50,8 +45,15 @@ namespace WinsonProject
             Rectangle[] currentTrafficLight = null;
             if (useTracking && trackingCountDown > 0)
             {
+                if(trackingCountDown == TL_REDETECT_CYCLE)
+                {
+                    currentTrafficLight = tlTracking.Track(prevFrame, imageFrame, prevTrafficLight);
+                }
+                else
+                {
+                    currentTrafficLight = tlTracking.ContinueTrack(imageFrame);
+                } 
                 trackingCountDown--;
-                currentTrafficLight = tlTracking.Track(prevFrame, imageFrame, prevTrafficLight);
             } else
             {
                 trackingCountDown = TL_REDETECT_CYCLE;
@@ -74,6 +76,14 @@ namespace WinsonProject
             #region draw rectangle
             foreach (Rectangle tlRect in currentTrafficLight){
                 drawFrame.Draw(tlRect, new Bgr(255, 0, 255), 1);
+                List<List<PointF>> tes = ((LucasKanadeTrafficLightTracking)tlTracking)._prevPointLists;
+                foreach(var l in tes)
+                {
+                    foreach(var p in l)
+                    {
+                        drawFrame.Draw(new CircleF(p, 1), new Bgr(0, 255, 0), 1);
+                    }
+                }
             }
             #endregion
 
@@ -81,7 +91,7 @@ namespace WinsonProject
             prevFrame = imageFrame;
             prevTrafficLight = currentTrafficLight;
             #endregion
-
+            Thread.Sleep(10);
             CamImageBox.Image = drawFrame;
         }
 
