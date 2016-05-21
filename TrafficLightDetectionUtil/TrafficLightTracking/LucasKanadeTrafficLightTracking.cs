@@ -60,6 +60,26 @@ namespace TrafficLightDetectionUtil
                             nextPts.Add(nextPtsArray[i]);
                         }
                     }
+
+                    #region remove outlier
+                    if (nextPts.Count > 0)
+                    {
+                        var tempPrevPts = new List<PointF>();
+                        var tempNextPts = new List<PointF>();
+                        var isOutlier = CheckIsOutlier(prevPts, nextPts);
+                        for (var i = 0; i < isOutlier.Count; i++)
+                        {
+                            if (!isOutlier[i])
+                            {
+                                tempPrevPts.Add(prevPts[i]);
+                                tempNextPts.Add(nextPts[i]);
+                            }
+                        }
+                        prevPts = tempPrevPts;
+                        nextPts = tempNextPts;
+                    }
+                    #endregion
+
                     if (nextPts.Count > 0)
                     {
                         listOfPointList.Add(nextPts);
@@ -108,6 +128,25 @@ namespace TrafficLightDetectionUtil
                     }
                 }
 
+                #region remove outlier
+                if (nextPts.Count > 0)
+                {
+                    var tempPrevPts = new List<PointF>();
+                    var tempNextPts = new List<PointF>();
+                    var isOutlier = CheckIsOutlier(prevPts, nextPts);
+                    for (var i = 0; i < isOutlier.Count; i++)
+                    {
+                        if (!isOutlier[i])
+                        {
+                            tempPrevPts.Add(prevPts[i]);
+                            tempNextPts.Add(nextPts[i]);
+                        }
+                    }
+                    prevPts = tempPrevPts;
+                    nextPts = tempNextPts;
+                }
+                #endregion
+
                 if (nextPts.Count > 0)
                 {
                     listOfPointList.Add(nextPts);
@@ -121,6 +160,37 @@ namespace TrafficLightDetectionUtil
             _prevFrame = currentFrame;
             return Array.ConvertAll(nextBoundingBox.ToArray(),
                 x => new Rectangle((int)x.Left, (int)x.Top, (int)x.Width, (int)x.Height));
+        }
+
+        private List<bool> CheckIsOutlier(List<PointF> prevPoints, List<PointF> nextPoints)
+        {
+            var nextPrevPoints = prevPoints.Zip(nextPoints, (prev, next) => new { Prev = prev, Next = next });
+            var dxList = new List<float>();
+            var dyList = new List<float>();
+            foreach (var nextPrevPoint in nextPrevPoints)
+            {
+                dxList.Add(nextPrevPoint.Next.X - nextPrevPoint.Prev.X);
+                dyList.Add(nextPrevPoint.Next.Y - nextPrevPoint.Prev.Y);
+            }
+
+            var xOutlierThreshold = OutlierRange(dxList);
+            var yOutlierThreshold = OutlierRange(dyList);
+
+            List<bool> isOutlier = new List<bool>();
+            for (var i = 0; i < nextPoints.Count; i++)
+            {
+                if (dxList[i] < xOutlierThreshold.Item1 || dxList[i] > xOutlierThreshold.Item2 ||
+                    dyList[i] < yOutlierThreshold.Item1 || dyList[i] > yOutlierThreshold.Item2)
+                {
+                    isOutlier.Add(true);
+                    Console.WriteLine("Found ");
+                } else
+                {
+                    isOutlier.Add(false);
+                }
+            }
+
+            return isOutlier;
         }
 
         private RectangleF PredictRegion(RectangleF rect, List<PointF> prevPoints, List<PointF> nextPoints)
@@ -140,9 +210,60 @@ namespace TrafficLightDetectionUtil
             {
                 meanDx = dxList.Average();
                 meanDy = dyList.Average();
-            } 
+            }
 
             return new RectangleF(rect.Left + meanDx, rect.Top + meanDy, rect.Width, rect.Height);
+        }
+
+        private Tuple<float, float> OutlierRange(List<float> numbers)
+        {
+            numbers.Sort();
+            int size = numbers.Count;
+            int mid = size / 2;
+
+            float q1 = 0;
+            float q2 = 0;
+            float q3 = 0;
+
+            if (size == 1)
+            {
+                q1 = numbers[0];
+                q2 = numbers[0];
+                q3 = numbers[0];
+            }
+            else if (size % 2 == 0)
+            {
+                q2 = (numbers[mid - 1] + numbers[mid]) / 2;
+                int midMid = mid / 2;
+                if (mid % 2 == 0)
+                {
+                    q1 = (numbers[midMid - 1] + numbers[midMid]) / 2;
+                    q3 = (numbers[mid + midMid - 1] + numbers[mid + midMid]) / 2;
+                }
+                else 
+                {
+                    q1 = numbers[midMid];
+                    q3 = numbers[mid + midMid];
+                }
+            }
+            else
+            {
+                q2 = numbers[mid];
+                if ((size-1) % 4 == 0)
+                {
+                    int n = (size - 1) / 4;
+                    q1 = (numbers[n - 1] * .25f) + (numbers[n] * .75f);
+                    q3 = (numbers[3 * n] * .75f) + (numbers[3 * n + 1] * .25f);
+                } else if( (size-3) % 4 == 0)
+                {
+                    int n = (size - 3) / 4;
+                    q1 = (numbers[n] * .75f) + (numbers[n + 1] * .25f);
+                    q3 = (numbers[3 * n + 1] * .25f) + (numbers[3 * n + 2] * .75f);
+                }
+            }
+
+            var iqr = q3 - q1;
+            return new Tuple<float, float>(q1 - 1.5f * iqr, q3 + 1.5f * iqr);
         }
     }
 }
