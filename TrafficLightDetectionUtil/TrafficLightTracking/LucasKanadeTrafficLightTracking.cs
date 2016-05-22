@@ -12,12 +12,17 @@ namespace TrafficLightDetectionUtil
     {
         GFTTDetector _featureDetector;
         RectangleF[] _prevBoundingBox;
-        public List<List<PointF>> _prevPointLists;
+        List<List<PointF>> _prevPointLists;
         Image<Bgr, byte> _prevFrame;
 
         public LucasKanadeTrafficLightTracking()
         {
             _featureDetector = new GFTTDetector(maxCorners: 100, qualityLevel: 0.3, minDistance: 1, blockSize: 3);
+        }
+
+        public List<List<PointF>> getTrackPointLists()
+        {
+            return _prevPointLists;
         }
 
         public Rectangle[] Track(Image<Bgr, byte> prevFrame, Image<Bgr, byte> currentFrame, Rectangle[] prevBoundingBox)
@@ -60,25 +65,6 @@ namespace TrafficLightDetectionUtil
                             nextPts.Add(nextPtsArray[i]);
                         }
                     }
-
-                    #region remove outlier
-                    if (nextPts.Count > 0)
-                    {
-                        var tempPrevPts = new List<PointF>();
-                        var tempNextPts = new List<PointF>();
-                        var isOutlier = CheckIsOutlier(prevPts, nextPts);
-                        for (var i = 0; i < isOutlier.Count; i++)
-                        {
-                            if (!isOutlier[i])
-                            {
-                                tempPrevPts.Add(prevPts[i]);
-                                tempNextPts.Add(nextPts[i]);
-                            }
-                        }
-                        prevPts = tempPrevPts;
-                        nextPts = tempNextPts;
-                    }
-                    #endregion
 
                     if (nextPts.Count > 0)
                     {
@@ -128,25 +114,6 @@ namespace TrafficLightDetectionUtil
                     }
                 }
 
-                #region remove outlier
-                if (nextPts.Count > 0)
-                {
-                    var tempPrevPts = new List<PointF>();
-                    var tempNextPts = new List<PointF>();
-                    var isOutlier = CheckIsOutlier(prevPts, nextPts);
-                    for (var i = 0; i < isOutlier.Count; i++)
-                    {
-                        if (!isOutlier[i])
-                        {
-                            tempPrevPts.Add(prevPts[i]);
-                            tempNextPts.Add(nextPts[i]);
-                        }
-                    }
-                    prevPts = tempPrevPts;
-                    nextPts = tempNextPts;
-                }
-                #endregion
-
                 if (nextPts.Count > 0)
                 {
                     listOfPointList.Add(nextPts);
@@ -160,37 +127,6 @@ namespace TrafficLightDetectionUtil
             _prevFrame = currentFrame;
             return Array.ConvertAll(nextBoundingBox.ToArray(),
                 x => new Rectangle((int)x.Left, (int)x.Top, (int)x.Width, (int)x.Height));
-        }
-
-        private List<bool> CheckIsOutlier(List<PointF> prevPoints, List<PointF> nextPoints)
-        {
-            var nextPrevPoints = prevPoints.Zip(nextPoints, (prev, next) => new { Prev = prev, Next = next });
-            var dxList = new List<float>();
-            var dyList = new List<float>();
-            foreach (var nextPrevPoint in nextPrevPoints)
-            {
-                dxList.Add(nextPrevPoint.Next.X - nextPrevPoint.Prev.X);
-                dyList.Add(nextPrevPoint.Next.Y - nextPrevPoint.Prev.Y);
-            }
-
-            var xOutlierThreshold = OutlierRange(dxList);
-            var yOutlierThreshold = OutlierRange(dyList);
-
-            List<bool> isOutlier = new List<bool>();
-            for (var i = 0; i < nextPoints.Count; i++)
-            {
-                if (dxList[i] < xOutlierThreshold.Item1 || dxList[i] > xOutlierThreshold.Item2 ||
-                    dyList[i] < yOutlierThreshold.Item1 || dyList[i] > yOutlierThreshold.Item2)
-                {
-                    isOutlier.Add(true);
-                    Console.WriteLine("Found ");
-                } else
-                {
-                    isOutlier.Add(false);
-                }
-            }
-
-            return isOutlier;
         }
 
         private RectangleF PredictRegion(RectangleF rect, List<PointF> prevPoints, List<PointF> nextPoints)
@@ -215,7 +151,39 @@ namespace TrafficLightDetectionUtil
             return new RectangleF(rect.Left + meanDx, rect.Top + meanDy, rect.Width, rect.Height);
         }
 
-        private Tuple<float, float> OutlierRange(List<float> numbers)
+        private List<bool> CheckIsOutlierIqr(List<PointF> prevPoints, List<PointF> nextPoints)
+        {
+            var nextPrevPoints = prevPoints.Zip(nextPoints, (prev, next) => new { Prev = prev, Next = next });
+            var dxList = new List<float>();
+            var dyList = new List<float>();
+            foreach (var nextPrevPoint in nextPrevPoints)
+            {
+                dxList.Add(nextPrevPoint.Next.X - nextPrevPoint.Prev.X);
+                dyList.Add(nextPrevPoint.Next.Y - nextPrevPoint.Prev.Y);
+            }
+
+            var xOutlierThreshold = OutlierRangeIqr(dxList);
+            var yOutlierThreshold = OutlierRangeIqr(dyList);
+
+            List<bool> isOutlier = new List<bool>();
+            for (var i = 0; i < nextPoints.Count; i++)
+            {
+                if (dxList[i] < xOutlierThreshold.Item1 || dxList[i] > xOutlierThreshold.Item2 ||
+                    dyList[i] < yOutlierThreshold.Item1 || dyList[i] > yOutlierThreshold.Item2)
+                {
+                    isOutlier.Add(true);
+                    Console.WriteLine("Found ");
+                }
+                else
+                {
+                    isOutlier.Add(false);
+                }
+            }
+
+            return isOutlier;
+        }
+
+        private Tuple<float, float> OutlierRangeIqr(List<float> numbers)
         {
             numbers.Sort();
             int size = numbers.Count;

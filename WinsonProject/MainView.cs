@@ -16,6 +16,7 @@ namespace WinsonProject
         private bool captureInProgress;
         private TrafficLightColorSegmentation tlColorSegmentation;
         private TrafficLightTracking tlTracking;
+        private System.Windows.Forms.Timer frameRateTimer;
         private String videoPath = "../../../data/singapore01.mp4";
 
         private Image<Bgr, byte> prevFrame;
@@ -23,7 +24,7 @@ namespace WinsonProject
         private int trackingCountDown;
         private bool useTracking;
 
-        private const int TL_REDETECT_CYCLE = 100;
+        private const int TL_REDETECT_CYCLE = 22;
 
         public MainView()
         {
@@ -62,6 +63,12 @@ namespace WinsonProject
                 imageFrame.ROI = new Rectangle(0, 0, 640, 180);
                 TrafficLightSegmentationResult[] results = tlColorSegmentation.DoColorSegmentation(imageFrame);
                 imageFrame.ROI = new Rectangle(0, 0, 640, 360);
+                #endregion
+
+                #region traffic light elimination
+                TrafficLightElimination tlPositionEliminate = new TrafficLightEliminationByPosition();
+                results = tlPositionEliminate.Eliminate(imageFrame, results);
+                #endregion
 
                 var trafficLightCandidate = new List<Rectangle>();
                 foreach (TrafficLightSegmentationResult result in results)
@@ -69,19 +76,22 @@ namespace WinsonProject
                     trafficLightCandidate.Add(result.Region);
                 }
                 currentTrafficLight = trafficLightCandidate.ToArray();
-                #endregion
+                
             }
 
             var drawFrame = imageFrame.Clone();
             #region draw rectangle
             foreach (Rectangle tlRect in currentTrafficLight){
-                drawFrame.Draw(tlRect, new Bgr(255, 0, 255), 1);
-                List<List<PointF>> tes = ((LucasKanadeTrafficLightTracking)tlTracking)._prevPointLists;
-                foreach(var l in tes)
+                drawFrame.Draw(tlRect, new Bgr(255, 0, 255), -1);
+                if (tlTracking is LucasKanadeTrafficLightTracking)
                 {
-                    foreach(var p in l)
+                    List<List<PointF>> tes = ((LucasKanadeTrafficLightTracking)tlTracking).getTrackPointLists();
+                    foreach (var l in tes)
                     {
-                        drawFrame.Draw(new CircleF(p, 1), new Bgr(0, 255, 0), 1);
+                        foreach (var p in l)
+                        {
+                            drawFrame.Draw(new CircleF(p, 1), new Bgr(0, 255, 0), 1);
+                        }
                     }
                 }
             }
@@ -103,6 +113,10 @@ namespace WinsonProject
                 try
                 {
                     capture = new Emgu.CV.Capture(videoPath);
+                    var fps = capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Fps);
+                    frameRateTimer = new System.Windows.Forms.Timer();
+                    frameRateTimer.Interval = (int)(1000.0 / fps);
+                    frameRateTimer.Start();
                 }
                 catch (NullReferenceException except)
                 {
@@ -116,11 +130,11 @@ namespace WinsonProject
                 if (captureInProgress)
                 {
                     StartButton.Text = "Start";
-                    Application.Idle -= ProcessFrame;
+                    frameRateTimer.Tick -= ProcessFrame;
                 } else
                 {
                     StartButton.Text = "Stop";
-                    Application.Idle += ProcessFrame;
+                    frameRateTimer.Tick += ProcessFrame;
                 }
                 captureInProgress = !captureInProgress;
             }
