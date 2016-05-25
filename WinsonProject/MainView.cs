@@ -16,6 +16,7 @@ namespace WinsonProject
         private bool captureInProgress;
         private TrafficLightColorSegmentation tlColorSegmentation;
         private TrafficLightTracking tlTracking;
+        private TrafficLightElimination tlPositionEliminate;
         private System.Windows.Forms.Timer frameRateTimer;
         private String videoPath = "../../../data/singapore01.mp4";
 
@@ -31,6 +32,7 @@ namespace WinsonProject
             InitializeComponent();
             tlColorSegmentation = new BasicTrafficLightColorSegmentation(5);
             tlTracking = new LucasKanadeTrafficLightTracking();
+            tlPositionEliminate = new TrafficLightEliminationByPosition();
 
             prevFrame = null;
             prevTrafficLight = null;
@@ -66,7 +68,6 @@ namespace WinsonProject
                 #endregion
 
                 #region traffic light elimination
-                TrafficLightElimination tlPositionEliminate = new TrafficLightEliminationByPosition();
                 results = tlPositionEliminate.Eliminate(imageFrame, results);
                 #endregion
 
