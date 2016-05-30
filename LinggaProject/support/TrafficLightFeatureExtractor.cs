@@ -211,14 +211,14 @@ namespace LinggaProject.support
             }
 
             int current_cell_number = 0;
-
-            Bitmap resized = ImageUtil.ResizeImage(ImageUtil.CropImage(image, top_left.X, top_left.Y, bottom_right.X - top_left.X, bottom_right.Y - top_left.Y), 3, 3);
+            
+            Bitmap resized = ImageUtil.ResizeImage(ImageUtil.CropImage(image, top_left.X, top_left.Y, bottom_right.X - top_left.X, bottom_right.Y - top_left.Y), Constants.size, Constants.size);
             //resized.Save("Instance Images\\Resized\\" + DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".bmp");
 
             // iterasi X titik
 
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
+            for (int i = 0; i < Constants.size; i++) {
+                for (int j = 0; j < Constants.size; j++) {
                     if (resized.GetPixel(i, j) == Color.White) {
                         return null;
                     }

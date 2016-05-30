@@ -8,6 +8,6 @@ namespace LinggaProject.support
 {
     class Constants
     {
-        public static int size = 3;
+        public static int size = 9;
     }
 }

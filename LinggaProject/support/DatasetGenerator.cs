@@ -227,9 +227,7 @@ namespace LinggaProject.support
         public void makeArff(string filename)
         {
             Instances data;
-            mainForm.addExplanationText("What1");
             FastVector atts = initArff();
-            mainForm.addExplanationText("What2");
 
             data = new Instances("trafficlights", atts, 0);
 

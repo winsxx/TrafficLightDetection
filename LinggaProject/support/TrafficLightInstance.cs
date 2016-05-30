@@ -23,7 +23,7 @@ namespace LinggaProject.support
         public TrafficLightInstance()
         {
             class_string = new string[3] { "red", "green", "yellow" };
-            colors = new HSB[25];
+            colors = new HSB[Constants.size * Constants.size];
         }
 
         public void print()
