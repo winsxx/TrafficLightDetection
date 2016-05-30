@@ -12,18 +12,17 @@ using weka.core;
 
 namespace LinggaProject.support
 {
-    class Trainer
+    class DatasetGenerator
     {
-        public static int size = 3;
         private string path;
-        private List<CSVTrainingInstance> csv_instances;
+        private List<CSVInstance> csv_instances;
         private List<TrafficLightInstance> tl_instances;
         private List<string> processed_images;
         private ExtractLisaForm mainForm;
 
-        public Trainer(string path, ExtractLisaForm mainForm)
+        public DatasetGenerator(string path, ExtractLisaForm mainForm)
         {
-            csv_instances = new List<CSVTrainingInstance>();
+            csv_instances = new List<CSVInstance>();
             tl_instances = new List<TrafficLightInstance>();
             processed_images = new List<string>();
             if (!path.EndsWith("\\")) {
@@ -34,17 +33,15 @@ namespace LinggaProject.support
         }
 
         /* Train positive and negative data */
-        public void train(string subpath, string imagepath, int number_of_instances)
+        public void generate(string subpath, string imagepath, int number_of_instances)
         {
-            string info = "TRAINING: POSITIVE TRAIN";
-            Console.WriteLine(info);
+            string info = "GENERATE: POSITIVE INSTANCE";
             mainForm.addExplanationText(info);
 
             if (subpath.StartsWith("\\")) {
                 subpath = subpath.Substring(1);
             }
             info = "source: " + path + subpath;
-            Console.WriteLine(info);
             mainForm.addExplanationText(info);
 
             try {
@@ -58,7 +55,6 @@ namespace LinggaProject.support
                     //int nbYes = 0;
                     processed_images = new List<string>();
                     while ((line = sr.ReadLine()) != null) {
-                        //Console.WriteLine("NB: " + nb);
                         nb++;
                         if (nb == 0) {
                             continue;
@@ -66,9 +62,8 @@ namespace LinggaProject.support
                         if (nb > number_of_instances && number_of_instances > 0) break;
 
                         row = line.Split(';');
-                        //Console.WriteLine("color: " + row[1]);
 
-                        CSVTrainingInstance instance = new CSVTrainingInstance();
+                        CSVInstance instance = new CSVInstance();
                         instance.filename = row[0].Replace("/", "\\");
                         instance.status = row[1];
 
@@ -76,14 +71,11 @@ namespace LinggaProject.support
                         instance.lower_right = new System.Drawing.Point(Integer.parseInt(row[4]), Integer.parseInt(row[5]));
 
                         csv_instances.Add(instance);
-                        //}
-                        //instance.print();
                     }
                     generateTlInstances(imagepath);
                     negativeTrain(number_of_instances);
                 }
             } catch (IOException e) {
-                Console.WriteLine("IO exception");
                 mainForm.addExplanationText("IO exception");
             }
         }
@@ -102,11 +94,11 @@ namespace LinggaProject.support
             string full_path = "";
             TrafficLightFeatureExtractor extractor = null;
 
-            foreach (CSVTrainingInstance instance in csv_instances) {
+            foreach (CSVInstance instance in csv_instances) {
                 TrafficLightInstance tl_instance;
 
                 if (image == null) {
-                    //Console.WriteLine("Image null in training");
+                    mainForm.addExplanationText("Image null in training");
                 }
                 int index_of_slash = instance.filename.IndexOf("\\") + 1;
                 string full_path_temp = path + subpath + instance.filename.Substring(index_of_slash);
@@ -114,7 +106,6 @@ namespace LinggaProject.support
                     // do nothing
                 } else {
                     string info = "> Processing Image: " + full_path_temp;
-                    Console.WriteLine(info);
                     mainForm.addExplanationText(info);
 
                     if (image != null) {
@@ -137,13 +128,11 @@ namespace LinggaProject.support
                                 color_condition = 1;
                                 instance.status = "go";
                             } else if (TrafficLightFeatureExtractor.isYellow(image.GetPixel(i, j))) {
-                                Console.WriteLine("train yellow");
                                 color_condition = 2;
                                 instance.status = "warning";
                             }
 
                             if (color_condition == -1) {
-                                Console.WriteLine("color condition -1");
                                 continue;
                             }
 
@@ -155,11 +144,11 @@ namespace LinggaProject.support
                             tl_instance = nineCellsProcessor(image, instance.upper_left, instance.lower_right, instance.status, 0);
 
                             // DEBUG
-                            Bitmap data = ImageUtil.CropImage(image, instance.upper_left.X, instance.upper_left.Y, instance.lower_right.X - instance.upper_left.X, instance.lower_right.Y - instance.upper_left.Y);
-                            if (data == null) {
-                                continue;
-                            }
-                            data.Save("Instance Images\\Positive\\" + nb_instance + "_" + DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".bmp");
+                            //Bitmap data = ImageUtil.CropImage(image, instance.upper_left.X, instance.upper_left.Y, instance.lower_right.X - instance.upper_left.X, instance.lower_right.Y - instance.upper_left.Y);
+                            //if (data == null) {
+                                //continue;
+                            //}
+                            //data.Save("Instance Images\\Positive\\" + nb_instance + "_" + DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".bmp");
 
                             if (tl_instance != null) {
                                 // debug
@@ -188,28 +177,20 @@ namespace LinggaProject.support
                     full_path = full_path_temp;
                 }
             }
-            csv_instances = new List<CSVTrainingInstance>();
+            csv_instances = new List<CSVInstance>();
         }
 
         /* train negative data, which captured in isRed, isGreen, or isYellow but not stated as traffic light in CSV */
         private void negativeTrain(int nb)
         {
-            string info = "TRAINING: NEGATIVE TRAIN";
-            Console.WriteLine(info);
+            string info = "GENERATOR: NEGATIVE";
             mainForm.addExplanationText(info);
             TrafficLightFeatureExtractor extractor = new TrafficLightFeatureExtractor();
             int nb_cur = 0;
             int nb_img = 0;
             foreach (string filename in processed_images) {
                 nb_img++;
-                //string filename = pair.Key;
-                //Bitmap image = pair.Value;
-
-                // DEBUG
-                //image.Save("Instance Images\\Processed Images\\" + (nb_img-1) + ".bmp");
-
                 info = "> Processing Image: " + filename;
-                Console.WriteLine(info);
                 mainForm.addExplanationText(info);
                 try {
                     Bitmap image = new Bitmap(filename);
@@ -223,20 +204,19 @@ namespace LinggaProject.support
                             null_instances++;
                             continue;
                         } else {
-                            //Console.WriteLine("write");
                             tl_instances.Add(tl_instance);
                             nb_cur++;
 
                             // DEBUG
                             Bitmap data = ImageUtil.CropImage(original_image, tl_instance.x, tl_instance.y, (int)tl_instance.width, (int)tl_instance.height);
-                            data.Save("Instance Images\\Negative\\" + nb_cur + "_" + DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".bmp");
+                            //data.Save("Instance Images\\Negative\\" + nb_cur + "_" + DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".bmp");
                         }
                     }
                 } catch (System.Exception e) {
                     Console.WriteLine(e.StackTrace);
                     info = "Exception when negative training";
-                    Console.WriteLine(info);
                     mainForm.addExplanationText(info);
+                    break;
                 }
                 if (nb != -1 && nb_img > nb) break;
             }
@@ -277,7 +257,7 @@ namespace LinggaProject.support
             int current_cell_number = 0;
 
             Bitmap resized = ImageUtil.ResizeImage(ImageUtil.CropImage(image, top_left.X, top_left.Y, bottom_right.X - top_left.X, bottom_right.Y - top_left.Y), 3, 3);
-            resized.Save("Instance Images\\Resized\\" + DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".bmp");
+            //resized.Save("Instance Images\\Resized\\" + DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".bmp");
 
             // iterasi X titik
 
@@ -295,8 +275,7 @@ namespace LinggaProject.support
 
                     // masukkan ke instance
                     tl_instance.colors[current_cell_number] = temp_color;
-
-                    //Console.WriteLine("cellno: " + current_cell_number + " HSB: (" + meanH + ", " + meanS + ", " + meanB + ")");
+                    
                     current_cell_number++;
                 }
             }
@@ -309,12 +288,13 @@ namespace LinggaProject.support
         public void makeArff(string filename)
         {
             Instances data;
+            mainForm.addExplanationText("What1");
             FastVector atts = initArff();
+            mainForm.addExplanationText("What2");
 
             data = new Instances("trafficlights", atts, 0);
 
             string info = "Make arff with " + tl_instances.Count + " instances";
-            Console.WriteLine(info);
             mainForm.addExplanationText(info);
 
             int nb_null_instances = 0;
@@ -327,18 +307,17 @@ namespace LinggaProject.support
 
                 double[] vals = new double[data.numAttributes()];
                 for (int i = 0; i < data.numAttributes(); i++) {
-                    for (int j = 0; j < size * size; j++) {
+                    for (int j = 0; j < Constants.size * Constants.size; j++) {
                         vals[0 + j * 3] = tl_instance.colors[j].H;
                         vals[1 + j * 3] = tl_instance.colors[j].S;
                         vals[2 + j * 3] = tl_instance.colors[j].B;
                     }
-                    vals[size * size * 3] = tl_instance.tl_class;
+                    vals[Constants.size * Constants.size * 3] = tl_instance.tl_class;
                 }
                 data.add(new Instance(1.0, vals));
             }
 
             info = "Training finished";
-            Console.WriteLine(info);
             mainForm.addExplanationText(info);
 
             File.WriteAllText(filename, data.toString());
@@ -348,7 +327,7 @@ namespace LinggaProject.support
         public static FastVector initArff()
         {
             FastVector atts = new FastVector();
-            for (int i = 0; i < size * size; i++) {
+            for (int i = 0; i < Constants.size * Constants.size; i++) {
                 atts.addElement(new weka.core.Attribute(i + "_h"));
                 atts.addElement(new weka.core.Attribute(i + "_s"));
                 atts.addElement(new weka.core.Attribute(i + "_b"));

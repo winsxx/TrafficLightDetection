@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LinggaProject.support
 {
-    class CSVTrainingInstance
+    class CSVInstance
     {
         public string filename;
         public string status;

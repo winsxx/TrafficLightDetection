@@ -33,8 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="IKVM.OpenJDK.Core">
-      <HintPath>..\dll_manageable\IKVM.OpenJDK.Core.dll</HintPath>
+    <Reference Include="IKVM.OpenJDK.Core, Version=7.2.4630.5, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Program Files\ikvm-7.2.4630.5\bin\IKVM.OpenJDK.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -59,7 +60,7 @@
       <DependentUpon>ExtractLisaForm.cs</DependentUpon>
     </Compile>
     <Compile Include="support\Constants.cs" />
-    <Compile Include="support\CSVTrainingInstance.cs" />
+    <Compile Include="support\CSVInstance.cs" />
     <Compile Include="support\HSB.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -72,7 +73,7 @@
     <Compile Include="support\ImageUtil.cs" />
     <Compile Include="support\TrafficLightFeatureExtractor.cs" />
     <Compile Include="support\TrafficLightInstance.cs" />
-    <Compile Include="support\Trainer.cs" />
+    <Compile Include="support\DatasetGenerator.cs" />
     <EmbeddedResource Include="ExtractLisaForm.resx">
       <DependentUpon>ExtractLisaForm.cs</DependentUpon>
     </EmbeddedResource>

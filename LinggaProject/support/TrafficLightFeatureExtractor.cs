@@ -24,11 +24,6 @@ namespace LinggaProject.support
             processed_image = new Bitmap(image);
         }
 
-        public void printExtracted()
-        {
-            //Console.WriteLine("TL: " + top_left);
-            //Console.WriteLine("RB: " + bottom_right);
-        }
 
         public List<TrafficLightInstance> generateFromBitmap(ref Bitmap bmp, bool is_positive)
         {
@@ -113,8 +108,7 @@ namespace LinggaProject.support
 
                 if (y < 0 || y > processed_image.Height - 1 || x < 0 || x > processed_image.Width - 1)
                     continue;
-
-                //Console.WriteLine("processing: (" + x + ", " + y + ")");
+                
 
                 bool color_condition = false;
                 switch (color_class) {
@@ -155,7 +149,6 @@ namespace LinggaProject.support
 
                     //Color alpha_current = Color.FromArgb(0, current);
                     processed_image.SetPixel(x, y, Color.White);
-                    //Console.WriteLine("nilai a: " + processed_image.GetPixel(x, y).A);
                 }
             }
 
@@ -220,7 +213,7 @@ namespace LinggaProject.support
             int current_cell_number = 0;
 
             Bitmap resized = ImageUtil.ResizeImage(ImageUtil.CropImage(image, top_left.X, top_left.Y, bottom_right.X - top_left.X, bottom_right.Y - top_left.Y), 3, 3);
-            resized.Save("Instance Images\\Resized\\" + DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".bmp");
+            //resized.Save("Instance Images\\Resized\\" + DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".bmp");
 
             // iterasi X titik
 
@@ -238,8 +231,7 @@ namespace LinggaProject.support
 
                     // masukkan ke instance
                     tl_instance.colors[current_cell_number] = temp_color;
-
-                    //Console.WriteLine("cellno: " + current_cell_number + " HSB: (" + meanH + ", " + meanS + ", " + meanB + ")");
+                    
                     current_cell_number++;
                 }
             }
