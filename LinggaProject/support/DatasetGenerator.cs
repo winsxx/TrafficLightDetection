@@ -141,7 +141,7 @@ namespace LinggaProject.support
                             instance.upper_left.Y = instance.lower_right.Y = j;
                             extractor.floodFind(i, j, color_condition, ref instance.upper_left, ref instance.lower_right);
 
-                            tl_instance = nineCellsProcessor(image, instance.upper_left, instance.lower_right, instance.status, 0);
+                            tl_instance = TrafficLightFeatureExtractor.nineCellsProcessor(image, instance.upper_left, instance.lower_right, instance.status, 0);
 
                             // DEBUG
                             //Bitmap data = ImageUtil.CropImage(image, instance.upper_left.X, instance.upper_left.Y, instance.lower_right.X - instance.upper_left.X, instance.lower_right.Y - instance.upper_left.Y);
@@ -220,67 +220,6 @@ namespace LinggaProject.support
                 }
                 if (nb != -1 && nb_img > nb) break;
             }
-        }
-
-        /* Generate one TrafficLightInstance from given to be cropped bitmap image */
-        // Train status 0 = positive train, 1 = negative train, 2 = classify
-        public static TrafficLightInstance nineCellsProcessor(Bitmap image, Point top_left, Point bottom_right, string status, int train_status)
-        {
-            TrafficLightInstance tl_instance = new TrafficLightInstance();
-            tl_instance.x = top_left.X;
-            tl_instance.y = top_left.Y;
-
-            tl_instance.height = bottom_right.Y - top_left.Y;
-            tl_instance.width = bottom_right.X - top_left.X;
-
-            float proportion = tl_instance.height / tl_instance.width;
-
-            // jika negative train, dan proporsinya mau kotak, dan ukurannya kecil, return null, karena bisa bikin false positive
-            if (train_status == 1 && proportion > 0.75 && proportion < 1.35 && tl_instance.height < 5 && tl_instance.width < 5) {
-                return null;
-            }
-
-            if (tl_instance.height < 2 || tl_instance.width < 2) {
-                return null;
-            } else if (train_status == 2 && !(proportion > 0.85 && proportion < 1.15)) {
-                return null;
-            }
-
-            if (status.StartsWith("go")) {
-                tl_instance.tl_class = 1;
-            } else if (status.StartsWith("stop")) {
-                tl_instance.tl_class = 0;
-            } else {
-                tl_instance.tl_class = 2;
-            }
-
-            int current_cell_number = 0;
-
-            Bitmap resized = ImageUtil.ResizeImage(ImageUtil.CropImage(image, top_left.X, top_left.Y, bottom_right.X - top_left.X, bottom_right.Y - top_left.Y), 3, 3);
-            //resized.Save("Instance Images\\Resized\\" + DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".bmp");
-
-            // iterasi X titik
-
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
-                    if (resized.GetPixel(i, j) == Color.White) {
-                        return null;
-                    }
-
-                    // generate mean 9 cell
-                    HSB temp_color = new HSB();
-                    temp_color.H = (resized.GetPixel(i, j).GetHue() + 40) % 360;
-                    temp_color.S = resized.GetPixel(i, j).GetSaturation();
-                    temp_color.B = resized.GetPixel(i, j).GetBrightness();
-
-                    // masukkan ke instance
-                    tl_instance.colors[current_cell_number] = temp_color;
-                    
-                    current_cell_number++;
-                }
-            }
-
-            return tl_instance;
         }
 
         /* Make ARFF based on given filename */
