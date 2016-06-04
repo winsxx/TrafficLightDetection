@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace LinggaProject.support
 {
-    struct HSB
+    public class BaseForm : Form
     {
-        public float H;
-        public float S;
-        public float B;
+        public virtual void addExplanationText(string text)
+        {
+
+        }
     }
 }

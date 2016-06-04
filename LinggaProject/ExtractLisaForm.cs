@@ -12,14 +12,14 @@ using weka.classifiers;
 
 namespace LinggaProject
 {
-    public partial class ExtractLisaForm : Form
+    public partial class ExtractLisaForm : BaseForm
     {
         public ExtractLisaForm()
         {
             InitializeComponent();
         }
 
-        public void addExplanationText(string text)
+        public override void addExplanationText(string text)
         {
             if (InvokeRequired) {
                 this.Invoke(new Action<string>(addExplanationText), new object[] { text });
@@ -39,7 +39,7 @@ namespace LinggaProject
                 DatasetGenerator generator = new DatasetGenerator("D:\\LISA_TL_dayTrain\\", this);
                 addExplanationText("root path initialized");
 
-                int nb_training = 1000;
+                int nb_training = 20;
 
                 // Positive and Negative Training
                 generator.generate("dayClip1\\frameAnnotationsBULB.csv", "dayClip1\\frames\\", nb_training / 4);

@@ -25,7 +25,7 @@ namespace LinggaProject.support
         }
 
 
-        public List<TrafficLightInstance> generateFromBitmap(ref Bitmap bmp, bool is_positive)
+        public List<TrafficLightInstance> generateFromBitmap(ref Bitmap bmp, bool is_positive, int correct_class_index)
         {
             Point top_left = new Point(0, 0);
             Point bottom_right = new Point(9000, 9000);
@@ -39,7 +39,7 @@ namespace LinggaProject.support
             Point p = new Point();
             //bool found = false;
             int color_condition = 0;
-            int class_addition = is_positive ? 0 : 3;
+            int class_addition = (is_positive && correct_class_index == -1) || (correct_class_index < 3 && correct_class_index >= 0) ? 0 : 3;
 
             // cari titik pertama
             for (int x = 0; x < processed_image.Width; x++) {
@@ -70,23 +70,29 @@ namespace LinggaProject.support
                         top_left.Y = bottom_right.Y = p.Y;
 
                         // telusuri untuk mengisi traffic_light_features, maksimal sebesar 60px x 60px
-                        floodFind(p.X, p.Y, color_condition, ref top_left, ref bottom_right);
+                        if (correct_class_index == color_condition + class_addition || correct_class_index == -1) {
+                            floodFind(p.X, p.Y, color_condition, ref top_left, ref bottom_right);
+                            // bila bukan training manual dan besar
+                            if (correct_class_index == -1 && (bottom_right.X - top_left.X > 10 || bottom_right.Y - top_left.Y > 10)) {
+                                // do nothing
+                            } else {
+                                string color_condition_string = "";
+                                if (color_condition == 0) {
+                                    color_condition_string = "stop";
+                                } else if (color_condition == 1) {
+                                    color_condition_string = "go";
+                                } else if (color_condition == 2) {
+                                    color_condition_string = "warning";
+                                }
 
-                        string color_condition_string = "";
-                        if (color_condition == 0) {
-                            color_condition_string = "stop";
-                        } else if (color_condition == 1) {
-                            color_condition_string = "go";
-                        } else if (color_condition == 2) {
-                            color_condition_string = "warning";
-                        }
-
-                        int train_status = is_positive ? 0 : 1;
-                        traffic_light = nineCellsProcessor(preserved_image, top_left, bottom_right, color_condition_string, train_status);
-                        if (traffic_light != null) {
-                            traffic_light.tl_class = color_condition + class_addition;
-                            tl_instances.Add(traffic_light);
-                            //traffic_light.print();
+                                int train_status = is_positive ? 0 : 1;
+                                traffic_light = nineCellsProcessor(preserved_image, top_left, bottom_right, color_condition_string, train_status);
+                                if (traffic_light != null) {
+                                    traffic_light.tl_class = color_condition + class_addition;
+                                    tl_instances.Add(traffic_light);
+                                    //traffic_light.print();
+                                }
+                            }
                         }
 
                     }
@@ -157,17 +163,34 @@ namespace LinggaProject.support
 
         public static bool isRed(Color p)
         {
-            return p != Color.White && p.R > 110 && p.R - p.G > 100 && p.R - p.B > 100;
+            HSV temp_hsv = ColorToHSV(p);
+            temp_hsv.H = (temp_hsv.H + 40) % 360;
+            return p != Color.White && temp_hsv.H < 65 && temp_hsv.S > 0.19 && temp_hsv.V > 0.30;
+            //float hue_mod = (p.GetHue() + 40) % 360;
+            //float sat = p.GetSaturation();
+            //float br = p.GetBrightness();
+            //return p != Color.White && hue_mod < 65 && sat > 0.50 && br > 0.50;
+            //return p != Color.White && p.R > 110 && p.R - p.G > 100 && p.R - p.B > 100;
         }
 
         public static bool isGreen(Color p)
         {
-            return p != Color.White && p.G > 110 && p.G - p.R > 69;
+            HSV temp_hsv = ColorToHSV(p);
+            temp_hsv.H = (temp_hsv.H + 40) % 360;
+            return p != Color.White && temp_hsv.H > 150 && temp_hsv.H < 230 && temp_hsv.S > 0.19 && temp_hsv.V > 0.30;
+            //return p != Color.White && p.G > 110 && p.G - p.R > 69;
         }
 
         public static bool isYellow(Color p)
         {
-            return p != Color.White && p.G > 100 && p.R > 100 && p.G - p.B > 50 && p.R - p.B > 50;
+            HSV temp_hsv = ColorToHSV(p);
+            temp_hsv.H = (temp_hsv.H + 40) % 360;
+            return p != Color.White && temp_hsv.H > 70 && temp_hsv.H < 120 && temp_hsv.S > 0.19 && temp_hsv.V > 0.30;
+            //float hue_mod = (p.GetHue() + 40) % 360;
+            //float sat = p.GetSaturation();
+            //float br = p.GetBrightness();
+            //return p != Color.White && hue_mod < 65 && sat > 50 && br > 50;
+            //return p != Color.White && p.G > 100 && p.R > 100 && p.G - p.B > 50 && p.R - p.B > 50;
         }
 
         public Bitmap getPreservedImage()
@@ -224,10 +247,10 @@ namespace LinggaProject.support
                     }
 
                     // generate mean 9 cell
-                    HSB temp_color = new HSB();
-                    temp_color.H = (resized.GetPixel(i, j).GetHue() + 40) % 360;
-                    temp_color.S = resized.GetPixel(i, j).GetSaturation();
-                    temp_color.B = resized.GetPixel(i, j).GetBrightness();
+                    HSV temp_color = new HSV();
+                    Color p = resized.GetPixel(i, j);
+                    temp_color = ColorToHSV(p);
+                    temp_color.H = (temp_color.H + 40) % 360;
 
                     // masukkan ke instance
                     tl_instance.colors[current_cell_number] = temp_color;
@@ -237,6 +260,19 @@ namespace LinggaProject.support
             }
 
             return tl_instance;
+        }
+
+        public static HSV ColorToHSV(Color color)
+        {
+            HSV hsv_color = new HSV();
+            int max = Math.Max(color.R, Math.Max(color.G, color.B));
+            int min = Math.Min(color.R, Math.Min(color.G, color.B));
+
+            hsv_color.H = color.GetHue();
+            hsv_color.S = (float)((max == 0) ? 0 : 1d - (1d * min / max));
+            hsv_color.V = (float)(max / 255d);
+
+            return hsv_color;
         }
     }
 }

@@ -15,7 +15,7 @@ namespace LinggaProject.support
         public float height;
         public float width;
         // color
-        public HSB[] colors;
+        public HSV[] colors;
         public int tl_class;
         // classstring
         private string[] class_string;
@@ -23,14 +23,14 @@ namespace LinggaProject.support
         public TrafficLightInstance()
         {
             class_string = new string[3] { "red", "green", "yellow" };
-            colors = new HSB[Constants.size * Constants.size];
+            colors = new HSV[Constants.size * Constants.size];
         }
 
         public void print()
         {
             Console.WriteLine("height: " + height + " width: " + width + " class: " + tl_class);
             for (int i = 0; i < Constants.size * Constants.size; i++) {
-                Console.WriteLine(i + " (" + colors[i].H + ", " + colors[i].S + ", " + colors[i].B + ")");
+                Console.WriteLine(i + " (" + colors[i].H + ", " + colors[i].S + ", " + colors[i].V + ")");
             }
         }
 

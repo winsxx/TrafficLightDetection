@@ -53,15 +53,24 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExtractDirectoryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExtractDirectoryForm.Designer.cs">
+      <DependentUpon>ExtractDirectoryForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ExtractLisaForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ExtractLisaForm.Designer.cs">
       <DependentUpon>ExtractLisaForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="support\BaseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="support\Constants.cs" />
     <Compile Include="support\CSVInstance.cs" />
-    <Compile Include="support\HSB.cs" />
+    <Compile Include="support\HSV.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -74,6 +83,9 @@
     <Compile Include="support\TrafficLightFeatureExtractor.cs" />
     <Compile Include="support\TrafficLightInstance.cs" />
     <Compile Include="support\DatasetGenerator.cs" />
+    <EmbeddedResource Include="ExtractDirectoryForm.resx">
+      <DependentUpon>ExtractDirectoryForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ExtractLisaForm.resx">
       <DependentUpon>ExtractLisaForm.cs</DependentUpon>
     </EmbeddedResource>
