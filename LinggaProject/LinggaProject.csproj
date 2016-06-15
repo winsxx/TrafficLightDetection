@@ -33,6 +33,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Emgu.CV.UI, Version=3.1.0.2282, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Emgu\emgucv-windesktop 3.1.0.2282\bin\Emgu.CV.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Emgu.CV.World, Version=3.1.0.2282, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Emgu\emgucv-windesktop 3.1.0.2282\bin\Emgu.CV.World.dll</HintPath>
+    </Reference>
     <Reference Include="IKVM.OpenJDK.Core, Version=7.2.4630.5, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Program Files\ikvm-7.2.4630.5\bin\IKVM.OpenJDK.Core.dll</HintPath>
@@ -53,43 +61,93 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExtractDirectoryForm.cs">
+    <Compile Include="emgu support\Extractor.cs" />
+    <Compile Include="emgu support\GlobalConstant.cs" />
+    <Compile Include="emgu support\Instance.cs" />
+    <Compile Include="emgu support\Tester.cs" />
+    <Compile Include="emgu support\Trainer.cs" />
+    <Compile Include="EmguImageTestForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ExtractDirectoryForm.Designer.cs">
+    <Compile Include="EmguImageTestForm.Designer.cs">
+      <DependentUpon>EmguImageTestForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EmguMLForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EmguMLForm.Designer.cs">
+      <DependentUpon>EmguMLForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EmguVideoTestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EmguVideoTestForm.Designer.cs">
+      <DependentUpon>EmguVideoTestForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="non emgu\ExtractDirectoryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="non emgu\ExtractDirectoryForm.Designer.cs">
       <DependentUpon>ExtractDirectoryForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ExtractLisaForm.cs">
+    <Compile Include="non emgu\ExtractLisaForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ExtractLisaForm.Designer.cs">
+    <Compile Include="non emgu\ExtractLisaForm.Designer.cs">
       <DependentUpon>ExtractLisaForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="support\BaseForm.cs">
+    <Compile Include="non emgu\ImageTestingForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="support\Constants.cs" />
-    <Compile Include="support\CSVInstance.cs" />
-    <Compile Include="support\HSV.cs" />
-    <Compile Include="MainForm.cs">
+    <Compile Include="non emgu\ImageTestingForm.designer.cs">
+      <DependentUpon>ImageTestingForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="non emgu\support\BaseForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
+    <Compile Include="non emgu\support\Constants.cs" />
+    <Compile Include="non emgu\support\CSVInstance.cs" />
+    <Compile Include="non emgu\support\HSV.cs" />
+    <Compile Include="non emgu\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="non emgu\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="support\ImageUtil.cs" />
-    <Compile Include="support\TrafficLightFeatureExtractor.cs" />
-    <Compile Include="support\TrafficLightInstance.cs" />
-    <Compile Include="support\DatasetGenerator.cs" />
-    <EmbeddedResource Include="ExtractDirectoryForm.resx">
+    <Compile Include="non emgu\support\ImageUtil.cs" />
+    <Compile Include="non emgu\support\PictureBoxWithInterpolationMode.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="non emgu\support\TrafficLightFeatureExtractor.cs" />
+    <Compile Include="non emgu\support\TrafficLightInstance.cs" />
+    <Compile Include="non emgu\support\DatasetGenerator.cs" />
+    <Compile Include="TrainerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TrainerForm.Designer.cs">
+      <DependentUpon>TrainerForm.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="EmguImageTestForm.resx">
+      <DependentUpon>EmguImageTestForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EmguMLForm.resx">
+      <DependentUpon>EmguMLForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EmguVideoTestForm.resx">
+      <DependentUpon>EmguVideoTestForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="non emgu\ExtractDirectoryForm.resx">
       <DependentUpon>ExtractDirectoryForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ExtractLisaForm.resx">
+    <EmbeddedResource Include="non emgu\ExtractLisaForm.resx">
       <DependentUpon>ExtractLisaForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
+    <EmbeddedResource Include="non emgu\ImageTestingForm.resx">
+      <DependentUpon>ImageTestingForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="non emgu\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -101,6 +159,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="TrainerForm.resx">
+      <DependentUpon>TrainerForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -113,6 +174,20 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="cvextern.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="msvcp120.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="msvcr120.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="opencv_ffmpeg310.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
