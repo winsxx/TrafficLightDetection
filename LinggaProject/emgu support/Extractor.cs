@@ -20,19 +20,24 @@ namespace LinggaProject.emgu_support
 
         public static Hsv[] extractCellsFromImage(Image<Hsv, Byte> img)
         {
+            int filled = 0;
             Hsv[] cells = new Hsv[GlobalConstant.INSTANCE_CELL_WIDTH * GlobalConstant.INSTANCE_CELL_HEIGHT];
             img = img.Resize(GlobalConstant.INSTANCE_CELL_WIDTH, GlobalConstant.INSTANCE_CELL_HEIGHT, Emgu.CV.CvEnum.Inter.Cubic);
 
-            //Debug.WriteLine("Image size: " + img.Width + ", " + img.Height);
-            for (int iy = 0; iy < img.Height; iy++) {
-                for (int ix = 0; ix < img.Width; ix++) {
-                    cells[iy * GlobalConstant.INSTANCE_CELL_WIDTH + ix] = img[ix, iy];
-                    //Debug.WriteLine("Processing: " + (iy * GlobalConstant.INSTANCE_CELL_WIDTH + ix));
-                    //Debug.WriteLine("  H: " + img[ix, iy].Hue);
-                    //Debug.WriteLine("  S: " + img[ix, iy].Satuation);
-                    //Debug.WriteLine("  V: " + img[ix, iy].Value);
-                }
-            }
+            int width = GlobalConstant.INSTANCE_CELL_WIDTH;
+            int height = GlobalConstant.INSTANCE_CELL_HEIGHT;
+
+            int completed = width * height;
+
+            Parallel.For(0, height,
+                iy => {
+                    Parallel.For(0, width,
+                       ix => {
+                           cells[iy * GlobalConstant.INSTANCE_CELL_WIDTH + ix] = img[ix, iy];
+                           filled++;
+                           //Debug.WriteLine(filled);
+                       });
+                });
             return cells;
         }
     }

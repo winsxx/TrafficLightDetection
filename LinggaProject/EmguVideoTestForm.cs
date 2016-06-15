@@ -40,7 +40,6 @@ namespace LinggaProject
         void processFrameUpdateGUI (object sender, EventArgs e)
         {
             try {
-                cap.QueryFrame();
                 Image<Bgr, Byte> img1 = cap.QueryFrame().ToImage<Bgr, Byte>();
                 //testVideoBox.Image = img1;
                 //return;
@@ -48,10 +47,8 @@ namespace LinggaProject
 
                 Dictionary<Rectangle, int> classifiedInstances = tester.imageTesting(img);
                 foreach (KeyValuePair<Rectangle, int> classifiedInstance in classifiedInstances) {
-                    //Debug.WriteLine(classifiedInstance.Value);
                     Hsv color = new Hsv();
                     Rectangle rect = classifiedInstance.Key;
-                    Debug.WriteLine("pass rect key");
                     switch (classifiedInstance.Value) {
                         case 0:
                             color = new Hsv(179, 255, 255);

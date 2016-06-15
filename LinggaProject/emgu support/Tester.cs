@@ -8,12 +8,13 @@ using Emgu.CV.ML;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace LinggaProject.emgu_support
 {
     class Tester
     {
-        Capture capture;
+        bool floodfillLockAvailable = true;
         Image<Hsv, Byte> originalImage;
         Image<Hsv, Byte> processedImage;
         Image<Gray, Byte> processedImageR;
@@ -22,6 +23,7 @@ namespace LinggaProject.emgu_support
         List<Instance> rangeDetected;
         Emgu.CV.ML.IStatModel redModel;
         Emgu.CV.ML.IStatModel greenModel;
+        Emgu.CV.ML.IStatModel yellowModel;
 
         public Tester()
         {
@@ -31,19 +33,22 @@ namespace LinggaProject.emgu_support
             if (GlobalConstant.CLASSIFIER_TYPE == "svm") {
                 redModel = new SVM();
                 greenModel = new SVM();
+                yellowModel = new SVM();
             } else if (GlobalConstant.CLASSIFIER_TYPE == "mlp") {
                 redModel = new ANN_MLP();
                 greenModel = new ANN_MLP();
+                yellowModel = new ANN_MLP();
             } else if (GlobalConstant.CLASSIFIER_TYPE == "bayes") {
                 redModel = new NormalBayesClassifier();
                 greenModel = new NormalBayesClassifier();
+                yellowModel = new NormalBayesClassifier();
             }
             FileStorage fsr = new FileStorage("red_model.xml", FileStorage.Mode.Read);
             redModel.Read(fsr.GetFirstTopLevelNode());
             fsr = new FileStorage("green_model.xml", FileStorage.Mode.Read);
             greenModel.Read(fsr.GetFirstTopLevelNode());
-            ////fsr = new FileStorage("yellow_model.xml", FileStorage.Mode.Read);
-            ////yellowModel.Read(fsr.GetFirstTopLevelNode());
+            fsr = new FileStorage("yellow_model.xml", FileStorage.Mode.Read);
+            yellowModel.Read(fsr.GetFirstTopLevelNode());
             fsr.ReleaseAndGetString();
         }
 
@@ -61,7 +66,7 @@ namespace LinggaProject.emgu_support
             processedImageG = processedImage.InRange(new Hsv(40, 128, 128), new Hsv(95, 255, 255));
             //// Yellow range
             ////processedImageY = processedImage.Convert<Bgr, Byte>().InRange(new Bgr(0, 160, 200), new Bgr(80, 255, 255));
-            ////processedImageY = processedImage.InRange(new Hsv(20, 100, 40), new Hsv(40, 255, 255));
+            processedImageY = processedImage.InRange(new Hsv(16, 100, 128), new Hsv(40, 255, 255));
 
             int height = processedImage.Height / 2;
             int width = processedImage.Width;
@@ -86,6 +91,7 @@ namespace LinggaProject.emgu_support
                                 break;
                         }
 
+
                         Rectangle rect = new Rectangle();
                         CvInvoke.FloodFill(process, null, new Point(ix, iy), new Hsv().MCvScalar, out rect, new MCvScalar(20, 20, 20), new MCvScalar(20, 20, 20));
                         if (rect.Width >= 3 && rect.Height >= 3 && rect.Width < 15 && rect.Height < 15) {
@@ -101,6 +107,7 @@ namespace LinggaProject.emgu_support
 
                             nbDetected++;
                         }
+
                     }
                 }
             }
@@ -118,14 +125,11 @@ namespace LinggaProject.emgu_support
         {
             if (isRed(iy, ix)) {
                 return GlobalConstant.CLASS_RED;
-            } else
-            if (isGreen(iy, ix)) {
+            } else if (isGreen(iy, ix)) {
                 return GlobalConstant.CLASS_GREEN;
-            }
-            //else if (isYellow(iy, ix)) {
-            //    return GlobalConstant.CLASS_YELLOW;
-            //} 
-            else {
+            } else if (isYellow(iy, ix)) {
+                return GlobalConstant.CLASS_YELLOW;
+            } else {
                 return -1;
             }
         }
@@ -150,86 +154,37 @@ namespace LinggaProject.emgu_support
             Dictionary<Rectangle, int> classifiedRange = new Dictionary<Rectangle, int>();
 
             foreach (Instance instance in rangeDetected) {
-                Hsv[] cells = instance.cells;
-                Matrix<float> mat = new Matrix<float>(1, GlobalConstant.INSTANCE_CELL_WIDTH * GlobalConstant.INSTANCE_CELL_HEIGHT * 3);
-                int it = 0;
-                foreach (Hsv cell in cells) {
-                    mat[0, it * 3 + 0] = (float)((cell.Hue + 20) % 180);
-                    mat[0, it * 3 + 1] = (float)cell.Satuation / 255;
-                    mat[0, it * 3 + 2] = (float)cell.Value / 255;
-                    it++;
-                }
-                int predictedClass = -1;
-                switch (instance.positiveClass) {
-                    case GlobalConstant.CLASS_RED:
-                        predictedClass = (int)redModel.Predict(mat, null);
-                        break;
-                    case GlobalConstant.CLASS_GREEN:
-                        predictedClass = (int)greenModel.Predict(mat, null);
-                        break;
-                }
-                if (predictedClass != -1) {
-                    classifiedRange.Add(instance.rect, predictedClass);
-                }
+                //if () {
+                    Hsv[] cells = instance.cells;
+                    Matrix<float> mat = new Matrix<float>(1, GlobalConstant.INSTANCE_CELL_WIDTH * GlobalConstant.INSTANCE_CELL_HEIGHT * 3);
+                    int it = 0;
+                    Parallel.ForEach(cells, cell => {
+                        mat[0, it * 3 + 0] = (float)((cell.Hue + 20) % 180);
+                        mat[0, it * 3 + 1] = (float)cell.Satuation / 255;
+                        mat[0, it * 3 + 2] = (float)cell.Value / 255;
+                        it++;
+                    });
+
+                    int predictedClass = -1;
+                    switch (instance.positiveClass) {
+                        case GlobalConstant.CLASS_RED:
+                            predictedClass = (int)redModel.Predict(mat, null);
+                            break;
+                        case GlobalConstant.CLASS_GREEN:
+                            predictedClass = (int)greenModel.Predict(mat, null);
+                            break;
+                        case GlobalConstant.CLASS_YELLOW:
+                            predictedClass = (int)yellowModel.Predict(mat, null);
+                            break;
+                    }
+                    if (predictedClass != -1 && !classifiedRange.ContainsKey(instance.rect)) {
+                        classifiedRange.Add(instance.rect, predictedClass);
+                    }
+                //}
             }
             rangeDetected.Clear();
 
             return classifiedRange;
-        }
-
-        public Rectangle floodFind(int ix, int iy, int colorRange)
-        {
-            Rectangle rect = new Rectangle(Int32.MaxValue, Int32.MaxValue, 1, 1);
-            Stack<Point> stack = new Stack<Point>();
-            Point starting_point = new Point(ix, iy);
-            stack.Push(starting_point);
-            while (stack.Count > 0) {
-                Point p = stack.Pop();
-                int x = p.X;
-                int y = p.Y;
-
-                if (y < 0 || y > processedImage.Height - 1 || x < 0 || x > processedImage.Width - 1)
-                    continue;
-
-
-                bool colorCondition = false;
-                switch (colorRange) {
-                    case 0:
-                        colorCondition = isRed(y, x);
-                        break;
-                    case 1:
-                        colorCondition = isGreen(y, x);
-                        break;
-                    case 2:
-                        colorCondition = isYellow(y, x);
-                        break;
-                }
-
-                if (colorCondition) {
-                    stack.Push(new Point(x + 1, y));
-                    stack.Push(new Point(x - 1, y));
-                    stack.Push(new Point(x, y + 1));
-                    stack.Push(new Point(x, y - 1));
-
-                    // update boundaries
-                    if (x < rect.X) {
-                        rect.X = x;
-                    }
-                    if (x > rect.X + rect.Width - 1) {
-                        rect.Width = x - rect.X + 1;
-                    }
-                    if (y < rect.Y) {
-                        rect.Y = y;
-                    }
-                    if (y > rect.Y + rect.Height - 1) {
-                        rect.Height = y - rect.Y + 1;
-                    }
-
-                    // update color
-                    processedImage[y, x] = GlobalConstant.BLANK;
-                }
-            }
-            return rect;
         }
     }
 }

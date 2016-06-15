@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -30,6 +31,7 @@ namespace LinggaProject
             {
                 Image<Hsv, Byte> img = new Image<Hsv, byte>(testImageDialog.FileName);
                 foreach (KeyValuePair<Rectangle, int> classifiedInstance in tester.imageTestingFromFile(testImageDialog.FileName)) {
+                    Debug.WriteLine("detected" + classifiedInstance.Value);
                     Hsv color = new Hsv();
                     Rectangle rect = classifiedInstance.Key;
                     switch (classifiedInstance.Value) {
@@ -43,7 +45,7 @@ namespace LinggaProject
                             color = new Hsv(30, 255, 255);
                             break;
                         default:
-                            color = new Hsv(120, 255, 255);
+                            color = new Hsv(0, 0, 0);
                             break;
                     }
                     // only print detected
