@@ -227,11 +227,73 @@ namespace LinggaProject.emgu_support
         {
             return processedImageY.Data[iy, ix, 0] > 100;
         }
+
+        public void testFromFolder(string classedImageFolderPath)
+        {
+            // Pair of <class, number of instance>
+            Dictionary<int, int> numberOfInstanceOfClassIndex = new Dictionary<int, int>();
+            Dictionary<int, int> correctlyClassified = new Dictionary<int, int>();
+            Dictionary<int, int> incorrectlyClassified = new Dictionary<int, int>();
+            // Initialize
+            for (int i=0; i<6; i++) {
+                numberOfInstanceOfClassIndex.Add(i, 0);
+                correctlyClassified.Add(i, 0);
+                incorrectlyClassified.Add(i, 0);
+            }
+
+            // Start testing
+            Tester tester = new Tester();
+            string[] classedFolderPaths = Directory.GetDirectories(classedImageFolderPath);
+            Debug.WriteLine("Processing " + classedFolderPaths.Length + " Folders");
+            foreach (string classedFolderPath in classedFolderPaths) {
+                Debug.WriteLine("Processing: " + classedFolderPath);
+
+                int indexOfSlash = classedFolderPath.LastIndexOf("\\") + 1;
+                string classString = classedFolderPath.Substring(indexOfSlash);
+                int classIndex = int.Parse(classString);
+                if (classIndex < 0 || classIndex > 5) {
+                    continue;
+                }
+
+                string[] classedImagePaths = Directory.GetFiles(classedFolderPath);
+
+                foreach (string classedImagePath in classedImagePaths) {
+                    Dictionary<Rectangle, int> classificationResult = tester.imageTestingFromFile(classedImagePath);
+                    if (classificationResult.Count == 0) continue;
+
+                    numberOfInstanceOfClassIndex[classIndex]++;
+                    if (classificationResult.First().Value == classIndex) {
+                        correctlyClassified[classIndex]++;
+                    } else {
+                        incorrectlyClassified[classificationResult.First().Value]++;
+                    }
+                }
+            }
+
+            Debug.WriteLine("Precision and Recall");
+            for (int i=0; i<3; i++) {
+                float precision = 0;
+                float recall = 0;
+
+                int divider = correctlyClassified[i] + incorrectlyClassified[i];
+                if (divider != 0) {
+                    precision = (float)correctlyClassified[i] / divider;
+                }
+
+                divider = numberOfInstanceOfClassIndex[i];
+                if (divider != 0) {
+                    recall = (float)correctlyClassified[i] / divider;
+                }
+
+                Debug.WriteLine("  " + i + " Instances : " + numberOfInstanceOfClassIndex[i]);
+                Debug.WriteLine("  " + i + " Precision : " + precision);
+                Debug.WriteLine("  " + i + " Recall : " + recall);
+            }
+        }
     }
 
     class CSVInstance
     {
-        public int id;
         public string filename;
         public Rectangle rect;
         public int classIndex;
@@ -241,4 +303,5 @@ namespace LinggaProject.emgu_support
             return filename + ": " + classIndex + " in " + rect;
         }
     }
+
 }

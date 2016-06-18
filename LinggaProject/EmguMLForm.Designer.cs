@@ -87,6 +87,7 @@
             this.automatedLisaTestButton.Text = "Automated LISA Testing";
             this.automatedLisaTestButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.automatedLisaTestButton.UseVisualStyleBackColor = true;
+            this.automatedLisaTestButton.Click += new System.EventHandler(this.automatedLisaTestButton_Click);
             // 
             // imageTestButton
             // 
