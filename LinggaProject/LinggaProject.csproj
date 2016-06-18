@@ -64,8 +64,15 @@
     <Compile Include="emgu support\Extractor.cs" />
     <Compile Include="emgu support\GlobalConstant.cs" />
     <Compile Include="emgu support\Instance.cs" />
+    <Compile Include="emgu support\LisaController.cs" />
     <Compile Include="emgu support\Tester.cs" />
     <Compile Include="emgu support\Trainer.cs" />
+    <Compile Include="EmguExtractLisaForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EmguExtractLisaForm.Designer.cs">
+      <DependentUpon>EmguExtractLisaForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="EmguImageTestForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -129,6 +136,9 @@
     <Compile Include="TrainerForm.Designer.cs">
       <DependentUpon>TrainerForm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="EmguExtractLisaForm.resx">
+      <DependentUpon>EmguExtractLisaForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="EmguImageTestForm.resx">
       <DependentUpon>EmguImageTestForm.cs</DependentUpon>
     </EmbeddedResource>

@@ -16,6 +16,7 @@ namespace LinggaProject
         EmguImageTestForm imageTestForm;
         EmguVideoTestForm videoTestForm;
         MainForm nonEmguMainForm;
+        EmguExtractLisaForm extractLisaForm;
 
         public EmguMLForm()
         {
@@ -44,6 +45,12 @@ namespace LinggaProject
         {
             nonEmguMainForm = new MainForm();
             nonEmguMainForm.Show();
+        }
+
+        private void generateLisaDatasetButton_Click(object sender, EventArgs e)
+        {
+            extractLisaForm = new EmguExtractLisaForm();
+            extractLisaForm.Show();
         }
     }
 }

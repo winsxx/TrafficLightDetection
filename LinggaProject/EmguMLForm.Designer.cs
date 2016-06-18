@@ -65,6 +65,7 @@
             this.generateLisaDatasetButton.Text = "Generate LISA Test Set";
             this.generateLisaDatasetButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.generateLisaDatasetButton.UseVisualStyleBackColor = true;
+            this.generateLisaDatasetButton.Click += new System.EventHandler(this.generateLisaDatasetButton_Click);
             // 
             // videoTestButton
             // 
