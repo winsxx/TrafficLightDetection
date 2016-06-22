@@ -12,6 +12,7 @@ namespace TrafficLightDetectionUtil
     {
         GFTTDetector _featureDetector;
         RectangleF[] _prevBoundingBox;
+        TrafficLightColorType[] _prevColors;
         List<List<PointF>> _prevPointLists;
         Image<Bgr, byte> _prevFrame;
 
@@ -25,20 +26,21 @@ namespace TrafficLightDetectionUtil
             return _prevPointLists;
         }
 
-        public Rectangle[] Track(Image<Bgr, byte> prevFrame, Image<Bgr, byte> currentFrame, Rectangle[] prevBoundingBox)
+        public TrafficLightSegmentationResult[] Track(Image<Bgr, byte> prevFrame, Image<Bgr, byte> currentFrame, TrafficLightSegmentationResult[] prevBoundingBox)
         {
             var prevGrayFrame = prevFrame.Convert<Gray, byte>();
             var currentGrayFrame = currentFrame.Convert<Gray, byte>();
             var mask = new Image<Gray, byte>(prevFrame.Width, prevFrame.Height);
             List<RectangleF> nextBoundingBox = new List<RectangleF>();
             List<List<PointF>> listOfPointList = new List<List<PointF>>();
+            List<TrafficLightColorType> nextColors = new List<TrafficLightColorType>();
 
-            foreach (Rectangle prevRect in prevBoundingBox)
+            foreach (TrafficLightSegmentationResult prevResult in prevBoundingBox)
             {
                 #region feature detection
-                CvInvoke.Rectangle(mask, prevRect, new MCvScalar(255, 255, 255));
+                CvInvoke.Rectangle(mask, prevResult.Region, new MCvScalar(255, 255, 255));
                 MKeyPoint[] keyPoints = _featureDetector.Detect(prevGrayFrame, mask: mask);
-                CvInvoke.Rectangle(mask, prevRect, new MCvScalar(0, 0, 0));
+                CvInvoke.Rectangle(mask, prevResult.Region, new MCvScalar(0, 0, 0));
                 List<PointF> pointList = new List<PointF>();
                 foreach (MKeyPoint keypoint in keyPoints)
                 {
@@ -69,8 +71,9 @@ namespace TrafficLightDetectionUtil
                     if (nextPts.Count > 0)
                     {
                         listOfPointList.Add(nextPts);
-                        var nextRect = PredictRegion(prevRect, prevPts, nextPts);
+                        var nextRect = PredictRegion(prevResult.Region, prevPts, nextPts);
                         nextBoundingBox.Add(nextRect);
+                        nextColors.Add(prevResult.ColorLabel);
                     }
                 }
                 #endregion
@@ -80,27 +83,27 @@ namespace TrafficLightDetectionUtil
             _prevPointLists = listOfPointList;
             _prevBoundingBox = nextBoundingBox.ToArray();
             _prevFrame = currentFrame;
-            return Array.ConvertAll(nextBoundingBox.ToArray(), 
-                x => new Rectangle((int)x.Left, (int)x.Top, (int)x.Width, (int)x.Height));
+            _prevColors = nextColors.ToArray();
+
+            return createResults(_prevBoundingBox, _prevColors);
         }
 
-        public Rectangle[] ContinueTrack(Image<Bgr, byte> currentFrame)
+        public TrafficLightSegmentationResult[] ContinueTrack(Image<Bgr, byte> currentFrame)
         {
             var currentGrayFrame = currentFrame.Convert<Gray, byte>();
             var prevGrayFrame = _prevFrame.Convert<Gray, byte>();
             List<RectangleF> nextBoundingBox = new List<RectangleF>();
             List<List<PointF>> listOfPointList = new List<List<PointF>>();
+            List<TrafficLightColorType> nextColors = new List<TrafficLightColorType>();
 
-            var boundingBoxAndKeyPointsList = 
-                _prevBoundingBox.Zip(_prevPointLists, (bb, kpl) => new { BoundingBox = bb, KeyPointList = kpl});
-            foreach (var boundBoxAndKeyPoints in boundingBoxAndKeyPointsList)
+            for (var bbIndex=0; bbIndex < _prevBoundingBox.Length; bbIndex++)
             {
                 #region tracking
                 PointF[] nextPtsArray = null;
                 byte[] status = null;
                 float[] err = null;
 
-                CvInvoke.CalcOpticalFlowPyrLK(prevGrayFrame, currentGrayFrame, boundBoxAndKeyPoints.KeyPointList.ToArray(), 
+                CvInvoke.CalcOpticalFlowPyrLK(prevGrayFrame, currentGrayFrame, _prevPointLists[bbIndex].ToArray(), 
                     new Size(15, 15), 2, new MCvTermCriteria(10, 0.03), out nextPtsArray, out status, out err);
 
                 List<PointF> prevPts = new List<PointF>();
@@ -109,7 +112,7 @@ namespace TrafficLightDetectionUtil
                 {
                     if (status[i] > 0)
                     {
-                        prevPts.Add(boundBoxAndKeyPoints.KeyPointList[i]);
+                        prevPts.Add(_prevPointLists[bbIndex][i]);
                         nextPts.Add(nextPtsArray[i]);
                     }
                 }
@@ -117,16 +120,28 @@ namespace TrafficLightDetectionUtil
                 if (nextPts.Count > 0)
                 {
                     listOfPointList.Add(nextPts);
-                    var nextRect = PredictRegion(boundBoxAndKeyPoints.BoundingBox, prevPts, nextPts);
+                    var nextRect = PredictRegion(_prevBoundingBox[bbIndex], prevPts, nextPts);
                     nextBoundingBox.Add(nextRect);
+                    nextColors.Add(_prevColors[bbIndex]);
                 }
                 #endregion
             }
             _prevPointLists = listOfPointList;
             _prevBoundingBox = nextBoundingBox.ToArray();
             _prevFrame = currentFrame;
-            return Array.ConvertAll(nextBoundingBox.ToArray(),
-                x => new Rectangle((int)x.Left, (int)x.Top, (int)x.Width, (int)x.Height));
+            _prevColors = nextColors.ToArray();
+            return createResults(_prevBoundingBox, _prevColors);
+        }
+
+        private TrafficLightSegmentationResult[] createResults(RectangleF[] rects, TrafficLightColorType[] colors)
+        {
+            var results = new TrafficLightSegmentationResult[rects.Length];
+            for(var i = 0; i <results.Length; i++)
+            {
+                results[i] = new TrafficLightSegmentationResult(
+                    new Rectangle((int)rects[i].Left, (int)rects[i].Top, (int)rects[i].Width, (int)rects[i].Height), colors[i]);
+            }
+            return results;
         }
 
         private RectangleF PredictRegion(RectangleF rect, List<PointF> prevPoints, List<PointF> nextPoints)

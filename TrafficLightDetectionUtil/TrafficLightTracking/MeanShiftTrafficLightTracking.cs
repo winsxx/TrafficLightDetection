@@ -13,14 +13,14 @@ namespace TrafficLightDetectionUtil
     public class MeanShiftTrafficLightTracking : TrafficLightTracking
     {
         List<Mat> _histList;
-        List<Rectangle> _prevBoundingBox;
+        List<TrafficLightSegmentationResult> _prevBoundingBox;
 
-        public Rectangle[] Track(Image<Bgr, byte> prevFrame, Image<Bgr, byte> currentFrame, Rectangle[] prevBoundingBox)
+        public TrafficLightSegmentationResult[] Track(Image<Bgr, byte> prevFrame, Image<Bgr, byte> currentFrame, TrafficLightSegmentationResult[] prevBoundingBox)
         {
             #region find histogram
             var prevFrameHsv = prevFrame.Convert<Hsv, byte>();
             var currentFrameHsv = currentFrame.Convert<Hsv, byte>();
-            _prevBoundingBox = new List<Rectangle>(prevBoundingBox);
+            _prevBoundingBox = new List<TrafficLightSegmentationResult>(prevBoundingBox);
             _histList = new List<Mat>();
             var mask = new Image<Gray, byte>(prevFrame.Width, prevFrame.Height);
             VectorOfMat vm1 = new VectorOfMat();
@@ -28,9 +28,9 @@ namespace TrafficLightDetectionUtil
             foreach (var prevRect in _prevBoundingBox)
             {
                 Mat roiHist = new Mat();
-                CvInvoke.Rectangle(mask, prevRect, new MCvScalar(255, 255, 255));
+                CvInvoke.Rectangle(mask, prevRect.Region, new MCvScalar(255, 255, 255));
                 CvInvoke.CalcHist(vm1, new int[] { 0 }, mask, roiHist, new int[] { 180 }, new float[] { 0, 180 }, false);
-                CvInvoke.Rectangle(mask, prevRect, new MCvScalar(0, 0, 0));
+                CvInvoke.Rectangle(mask, prevRect.Region, new MCvScalar(0, 0, 0));
                 CvInvoke.Normalize(roiHist, roiHist, 0, 255, Emgu.CV.CvEnum.NormType.MinMax);
                 _histList.Add(roiHist);
             }
@@ -43,18 +43,16 @@ namespace TrafficLightDetectionUtil
             {
                 Mat backProj = new Mat();
                 CvInvoke.CalcBackProject(vm2, new int[] { 0 }, _histList[i], backProj, new float[] { 0, 180 }, 1);
-                Rectangle boundingBox = _prevBoundingBox[i];
-                Console.Write("Awal "+boundingBox + " ");
+                Rectangle boundingBox = _prevBoundingBox[i].Region;
                 CvInvoke.MeanShift(backProj, ref boundingBox, new MCvTermCriteria(10, 1));
-                Console.WriteLine(boundingBox);
-                _prevBoundingBox[i] = boundingBox;
+                _prevBoundingBox[i].Region = boundingBox;
             }
             #endregion
 
             return _prevBoundingBox.ToArray();
         }
 
-        public Rectangle[] ContinueTrack(Image<Bgr, byte> currentFrame)
+        public TrafficLightSegmentationResult[] ContinueTrack(Image<Bgr, byte> currentFrame)
         {
             var currentFrameHsv = currentFrame.Convert<Hsv, byte>();
             #region tracking
@@ -64,11 +62,9 @@ namespace TrafficLightDetectionUtil
             {
                 Mat backProj = new Mat();
                 CvInvoke.CalcBackProject(vm2, new int[] { 0 }, _histList[i], backProj, new float[] { 0, 180 }, 1);
-                Rectangle boundingBox = _prevBoundingBox[i];
-                Console.Write(boundingBox + " ");
+                Rectangle boundingBox = _prevBoundingBox[i].Region;
                 CvInvoke.MeanShift(backProj, ref boundingBox, new MCvTermCriteria(10, 1));
-                Console.WriteLine(boundingBox);
-                _prevBoundingBox[i] = boundingBox;
+                _prevBoundingBox[i].Region = boundingBox;
             }
             #endregion
 

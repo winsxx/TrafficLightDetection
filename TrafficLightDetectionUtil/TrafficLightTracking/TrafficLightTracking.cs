@@ -12,11 +12,11 @@ namespace TrafficLightDetectionUtil
 {
     public interface TrafficLightTracking
     {
-        Rectangle[] Track(
+        TrafficLightSegmentationResult[] Track(
             Image<Bgr, byte> prevFrame,
             Image<Bgr, byte> currentFrame,
-            Rectangle[] prevBoundingBox);
+            TrafficLightSegmentationResult[] prevBoundingBox);
 
-        Rectangle[] ContinueTrack(Image<Bgr, byte> currentFrame);
+        TrafficLightSegmentationResult[] ContinueTrack(Image<Bgr, byte> currentFrame);
     }
 }
