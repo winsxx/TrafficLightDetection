@@ -7,6 +7,7 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 using TrafficLightDetectionUtil;
 using System.Threading;
+using System.Diagnostics;
 
 namespace WinsonProject
 {
@@ -24,8 +25,10 @@ namespace WinsonProject
         private TrafficLightSegmentationResult[] prevTrafficLight;
         private int trackingCountDown;
         private bool useTracking;
+        private int numOfFrameProcessed;
+        private double avgElapsedTime;
 
-        private const int TL_REDETECT_CYCLE = 22;
+        private const int TL_REDETECT_CYCLE = 0;
 
         public MainView()
         {
@@ -36,20 +39,25 @@ namespace WinsonProject
 
             prevFrame = null;
             prevTrafficLight = null;
-            trackingCountDown = 0;
             useTracking = true;
         }
 
         private void ProcessFrame(object sender, EventArgs arg)
         {
-            Image<Bgr, Byte> imageFrame = capture.QueryFrame().ToImage<Bgr, Byte>();
-            if(imageFrame == null)
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            var captureFrame = capture.QueryFrame();
+            if(captureFrame == null)
             {
                 StartButton.Text = "Start";
                 frameRateTimer.Tick -= ProcessFrame;
                 captureInProgress = false;
                 capture = new Emgu.CV.Capture(videoPath);
+                trackingCountDown = 0;
+                numOfFrameProcessed = 0;
+                avgElapsedTime = 0.0;
+                return;
             }
+            Image<Bgr, Byte> imageFrame = captureFrame.ToImage<Bgr, Byte>();
             var oldImageFrame = imageFrame;
             imageFrame = imageFrame.Resize(640, 360, Emgu.CV.CvEnum.Inter.Linear);
             oldImageFrame.Dispose();
@@ -103,10 +111,10 @@ namespace WinsonProject
                         break;
                 }
                 drawFrame.Draw(tlRect.Region, boxColor, -1);
-                if (tlTracking is LucasKanadeTrafficLightTracking)
+                if (tlTracking is LucasKanadeTrafficLightTracking && trackingCountDown!=TL_REDETECT_CYCLE)
                 {
-                    List<List<PointF>> tes = ((LucasKanadeTrafficLightTracking)tlTracking).getTrackPointLists();
-                    foreach (var l in tes)
+                    List<List<PointF>> pointList = ((LucasKanadeTrafficLightTracking)tlTracking).getTrackPointLists();
+                    foreach (var l in pointList)
                     {
                         foreach (var p in l)
                         {
@@ -121,8 +129,15 @@ namespace WinsonProject
             prevFrame = imageFrame;
             prevTrafficLight = currentTrafficLight;
             #endregion
-            Thread.Sleep(10);
             CamImageBox.Image = drawFrame;
+
+            stopwatch.Stop();
+
+            numOfFrameProcessed++;
+            avgElapsedTime = avgElapsedTime + (stopwatch.ElapsedMilliseconds - avgElapsedTime) / numOfFrameProcessed;
+            infoTextBox.Text = "";
+            infoTextBox.AppendText("Frame elapsed time   : " + stopwatch.ElapsedMilliseconds + " ms\n");
+            infoTextBox.AppendText("Average elapsed time : " + avgElapsedTime.ToString("0.000") + " ms\n");
         }
 
         private void StartButton_Click(object sender, EventArgs e)
@@ -137,6 +152,9 @@ namespace WinsonProject
                     frameRateTimer = new System.Windows.Forms.Timer();
                     frameRateTimer.Interval = (int)(1000.0 / fps);
                     frameRateTimer.Start();
+                    trackingCountDown = 0;
+                    numOfFrameProcessed = 0;
+                    avgElapsedTime = 0.0;
                 }
                 catch (NullReferenceException except)
                 {
