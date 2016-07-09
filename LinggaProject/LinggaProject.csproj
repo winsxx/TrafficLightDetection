@@ -88,11 +88,17 @@
     <Compile Include="EmguMLForm.Designer.cs">
       <DependentUpon>EmguMLForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="EmguTestLisaForm.cs">
+    <Compile Include="EmguTrainingGeneratorForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="EmguTestLisaForm.Designer.cs">
-      <DependentUpon>EmguTestLisaForm.cs</DependentUpon>
+    <Compile Include="EmguTrainingGeneratorForm.Designer.cs">
+      <DependentUpon>EmguTrainingGeneratorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EmguTesterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EmguTesterForm.Designer.cs">
+      <DependentUpon>EmguTesterForm.cs</DependentUpon>
     </Compile>
     <Compile Include="EmguVideoTestForm.cs">
       <SubType>Form</SubType>
@@ -154,8 +160,11 @@
     <EmbeddedResource Include="EmguMLForm.resx">
       <DependentUpon>EmguMLForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="EmguTestLisaForm.resx">
-      <DependentUpon>EmguTestLisaForm.cs</DependentUpon>
+    <EmbeddedResource Include="EmguTrainingGeneratorForm.resx">
+      <DependentUpon>EmguTrainingGeneratorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EmguTesterForm.resx">
+      <DependentUpon>EmguTesterForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="EmguVideoTestForm.resx">
       <DependentUpon>EmguVideoTestForm.cs</DependentUpon>

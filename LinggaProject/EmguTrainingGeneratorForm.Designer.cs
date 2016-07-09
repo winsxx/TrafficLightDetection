@@ -1,6 +1,6 @@
 ﻿namespace LinggaProject
 {
-    partial class EmguTestLisaForm
+    partial class EmguAutomatedTestForm
     {
         /// <summary>
         /// Required designer variable.
@@ -53,15 +53,15 @@
             this.explanationText.TabIndex = 3;
             this.explanationText.Text = "";
             // 
-            // EmguTestLisaForm
+            // EmguAutomatedTestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(888, 325);
             this.Controls.Add(this.explanationText);
             this.Controls.Add(this.selectLisaFolderButton);
-            this.Name = "EmguTestLisaForm";
-            this.Text = "EmguTestLisaForm";
+            this.Name = "EmguAutomatedTestForm";
+            this.Text = "Random Training Set Generator";
             this.ResumeLayout(false);
 
         }

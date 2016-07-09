@@ -62,7 +62,7 @@
             this.Controls.Add(this.testImageBox);
             this.Controls.Add(this.browseImageButton);
             this.Name = "EmguImageTestForm";
-            this.Text = "EmguImageTestForm";
+            this.Text = "Image Testing";
             ((System.ComponentModel.ISupportInitialize)(this.testImageBox)).EndInit();
             this.ResumeLayout(false);
 

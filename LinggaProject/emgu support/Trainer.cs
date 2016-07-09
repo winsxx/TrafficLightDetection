@@ -197,13 +197,18 @@ namespace LinggaProject.emgu_support
                     }
                     return null;
                 case "rforest":
-                    RTrees rTrees = new RTrees();
-                    rTrees.CVFolds = 1;
-                    TrainData td = new TrainData(trainData, DataLayoutType.RowSample, trainClasses);
-                    trained = rTrees.Train(td);
-                    if (trained) {
-                        form.addExplanationText("Trained with random forest", true);
-                        return rTrees;
+                    try {
+                        RTrees rTrees = new RTrees();
+                        rTrees.CVFolds = 1;
+                        rTrees.MaxDepth = 5;
+                        TrainData td = new TrainData(trainData, DataLayoutType.RowSample, trainClasses);
+                        trained = rTrees.Train(td);
+                        if (trained) {
+                            form.addExplanationText("Trained with random forest", true);
+                            return rTrees;
+                        }
+                    } catch (Exception e) {
+                        Debug.WriteLine(e.StackTrace);
                     }
                     return null;
                 case "svm":
@@ -232,7 +237,7 @@ namespace LinggaProject.emgu_support
                                     if (j==GlobalConstant.CLASS_RED) {
                                         trainClassesMlp[i, j] = 1;
                                     } else {
-                                        trainClassesMlp[i, j] = -1;
+                                        trainClassesMlp[i, j] = 0;
                                     }
                                 }
                                 break;
@@ -241,7 +246,7 @@ namespace LinggaProject.emgu_support
                                     if (j == GlobalConstant.CLASS_GREEN) {
                                         trainClassesMlp[i, j] = 1;
                                     } else {
-                                        trainClassesMlp[i, j] = -1;
+                                        trainClassesMlp[i, j] = 0;
                                     }
                                 }
                                 break;
@@ -250,7 +255,7 @@ namespace LinggaProject.emgu_support
                                     if (j == GlobalConstant.CLASS_YELLOW) {
                                         trainClassesMlp[i, j] = 1;
                                     } else {
-                                        trainClassesMlp[i, j] = -1;
+                                        trainClassesMlp[i, j] = 0;
                                     }
                                 }
                                 break;
@@ -259,7 +264,7 @@ namespace LinggaProject.emgu_support
                                     if (j == GlobalConstant.CLASS_FALSE_RED) {
                                         trainClassesMlp[i, j] = 1;
                                     } else {
-                                        trainClassesMlp[i, j] = -1;
+                                        trainClassesMlp[i, j] = 0;
                                     }
                                 }
                                 break;
@@ -268,7 +273,7 @@ namespace LinggaProject.emgu_support
                                     if (j == GlobalConstant.CLASS_FALSE_GREEN) {
                                         trainClassesMlp[i, j] = 1;
                                     } else {
-                                        trainClassesMlp[i, j] = -1;
+                                        trainClassesMlp[i, j] = 0;
                                     }
                                 }
                                 break;
@@ -277,7 +282,7 @@ namespace LinggaProject.emgu_support
                                     if (j == GlobalConstant.CLASS_FALSE_YELLOW) {
                                         trainClassesMlp[i, j] = 1;
                                     } else {
-                                        trainClassesMlp[i, j] = -1;
+                                        trainClassesMlp[i, j] = 0;
                                     }
                                 }
                                 break;
@@ -294,7 +299,7 @@ namespace LinggaProject.emgu_support
 
                     TrainData tdMlp = new TrainData(trainData, Emgu.CV.ML.MlEnum.DataLayoutType.RowSample, trainClassesMlp);
 
-                    Matrix<int> layerSize = new Matrix<int>(new int[] { trainData.Cols, 100, 200, 100, 6 });
+                    Matrix<int> layerSize = new Matrix<int>(new int[] { trainData.Cols, 80, 6 });
                     ANN_MLP network = new ANN_MLP();
                     network.SetActivationFunction(ANN_MLP.AnnMlpActivationFunction.SigmoidSym);
                     network.TermCriteria = new MCvTermCriteria(3000, 1.0e-6);

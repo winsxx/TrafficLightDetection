@@ -49,9 +49,9 @@
             // 
             this.buildClassifierButton.Location = new System.Drawing.Point(15, 26);
             this.buildClassifierButton.Name = "buildClassifierButton";
-            this.buildClassifierButton.Size = new System.Drawing.Size(206, 23);
+            this.buildClassifierButton.Size = new System.Drawing.Size(132, 23);
             this.buildClassifierButton.TabIndex = 1;
-            this.buildClassifierButton.Text = "Build Classifier Using Manual Data";
+            this.buildClassifierButton.Text = "Build Classifier";
             this.buildClassifierButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buildClassifierButton.UseVisualStyleBackColor = true;
             this.buildClassifierButton.Click += new System.EventHandler(this.buildClassifierButton_Click);
@@ -62,7 +62,7 @@
             this.generateLisaDatasetButton.Name = "generateLisaDatasetButton";
             this.generateLisaDatasetButton.Size = new System.Drawing.Size(132, 23);
             this.generateLisaDatasetButton.TabIndex = 2;
-            this.generateLisaDatasetButton.Text = "Generate LISA Test Set";
+            this.generateLisaDatasetButton.Text = "Generate Test Set";
             this.generateLisaDatasetButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.generateLisaDatasetButton.UseVisualStyleBackColor = true;
             this.generateLisaDatasetButton.Click += new System.EventHandler(this.generateLisaDatasetButton_Click);
@@ -71,7 +71,7 @@
             // 
             this.videoTestButton.Location = new System.Drawing.Point(15, 84);
             this.videoTestButton.Name = "videoTestButton";
-            this.videoTestButton.Size = new System.Drawing.Size(84, 23);
+            this.videoTestButton.Size = new System.Drawing.Size(132, 23);
             this.videoTestButton.TabIndex = 3;
             this.videoTestButton.Text = "Video Testing";
             this.videoTestButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -84,7 +84,7 @@
             this.automatedLisaTestButton.Name = "automatedLisaTestButton";
             this.automatedLisaTestButton.Size = new System.Drawing.Size(132, 23);
             this.automatedLisaTestButton.TabIndex = 4;
-            this.automatedLisaTestButton.Text = "Automated LISA Testing";
+            this.automatedLisaTestButton.Text = "Automated Testing";
             this.automatedLisaTestButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.automatedLisaTestButton.UseVisualStyleBackColor = true;
             this.automatedLisaTestButton.Click += new System.EventHandler(this.automatedLisaTestButton_Click);
@@ -93,7 +93,7 @@
             // 
             this.imageTestButton.Location = new System.Drawing.Point(15, 55);
             this.imageTestButton.Name = "imageTestButton";
-            this.imageTestButton.Size = new System.Drawing.Size(84, 23);
+            this.imageTestButton.Size = new System.Drawing.Size(132, 23);
             this.imageTestButton.TabIndex = 5;
             this.imageTestButton.Text = "Image Testing";
             this.imageTestButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -104,9 +104,9 @@
             // 
             this.nonEmguButton.Location = new System.Drawing.Point(15, 171);
             this.nonEmguButton.Name = "nonEmguButton";
-            this.nonEmguButton.Size = new System.Drawing.Size(84, 23);
+            this.nonEmguButton.Size = new System.Drawing.Size(132, 23);
             this.nonEmguButton.TabIndex = 6;
-            this.nonEmguButton.Text = "Non Emgu";
+            this.nonEmguButton.Text = "Weka Version";
             this.nonEmguButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.nonEmguButton.UseVisualStyleBackColor = true;
             this.nonEmguButton.Click += new System.EventHandler(this.nonEmguButton_Click);
@@ -124,7 +124,7 @@
             this.Controls.Add(this.buildClassifierButton);
             this.Controls.Add(this.label1);
             this.Name = "EmguMLForm";
-            this.Text = "EmguMLForm";
+            this.Text = "TL Detection By Color";
             this.ResumeLayout(false);
             this.PerformLayout();
 

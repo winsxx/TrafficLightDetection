@@ -12,7 +12,7 @@ namespace LinggaProject.emgu_support
         public static int INSTANCE_CELL_WIDTH = 9;
         public static int INSTANCE_CELL_HEIGHT = 9;
         public static int NUMBER_OF_TRAINING_DATA = 5000;
-        public static string CLASSIFIER_TYPE = "rforest";
+        public static string CLASSIFIER_TYPE = "bayes";
         public static Hsv BLANK = new Hsv(0, 0, 0);
         public static bool IS_BINARY = false;
         public static int RED_SHIFT = 20;

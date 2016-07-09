@@ -11,10 +11,10 @@ using System.Windows.Forms;
 
 namespace LinggaProject
 {
-    public partial class EmguTestLisaForm : EmguBaseForm
+    public partial class EmguTesterForm : EmguBaseForm
     {
         LisaController lisaController;
-        public EmguTestLisaForm()
+        public EmguTesterForm()
         {
             InitializeComponent();
             lisaController = new LisaController(this);

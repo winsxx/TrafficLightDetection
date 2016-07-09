@@ -83,7 +83,7 @@
             this.Controls.Add(this.nbInstances);
             this.Controls.Add(this.selectLisaFolderButton);
             this.Name = "EmguExtractLisaForm";
-            this.Text = "EmguExtractLisaForm";
+            this.Text = "LISA Dataset Extractor";
             this.ResumeLayout(false);
             this.PerformLayout();
 

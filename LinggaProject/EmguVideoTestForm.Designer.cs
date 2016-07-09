@@ -71,7 +71,7 @@
             this.Controls.Add(this.testVideoBox);
             this.Controls.Add(this.browseVideoButton);
             this.Name = "EmguVideoTestForm";
-            this.Text = "EmguVideoTestForm";
+            this.Text = "Video Testing";
             this.Load += new System.EventHandler(this.EmguVideoTestForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.testVideoBox)).EndInit();
             this.ResumeLayout(false);

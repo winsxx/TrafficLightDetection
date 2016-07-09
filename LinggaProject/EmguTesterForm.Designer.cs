@@ -1,6 +1,6 @@
 ﻿namespace LinggaProject
 {
-    partial class EmguTrainerForm
+    partial class EmguTesterForm
     {
         /// <summary>
         /// Required designer variable.
@@ -27,22 +27,22 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.selectManualTrainingFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.selectManualTrainingFolderButton = new System.Windows.Forms.Button();
+            this.selectLisaFolderButton = new System.Windows.Forms.Button();
+            this.lisaFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.explanationText = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
-            // selectManualTrainingFolderButton
+            // selectLisaFolderButton
             // 
-            this.selectManualTrainingFolderButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.selectManualTrainingFolderButton.Location = new System.Drawing.Point(12, 12);
-            this.selectManualTrainingFolderButton.Name = "selectManualTrainingFolderButton";
-            this.selectManualTrainingFolderButton.Size = new System.Drawing.Size(85, 23);
-            this.selectManualTrainingFolderButton.TabIndex = 0;
-            this.selectManualTrainingFolderButton.Text = "Select Folder";
-            this.selectManualTrainingFolderButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.selectManualTrainingFolderButton.UseVisualStyleBackColor = true;
-            this.selectManualTrainingFolderButton.Click += new System.EventHandler(this.selectManualTrainingFolderButton_Click);
+            this.selectLisaFolderButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.selectLisaFolderButton.Location = new System.Drawing.Point(12, 12);
+            this.selectLisaFolderButton.Name = "selectLisaFolderButton";
+            this.selectLisaFolderButton.Size = new System.Drawing.Size(109, 23);
+            this.selectLisaFolderButton.TabIndex = 2;
+            this.selectLisaFolderButton.Text = "Test From Folder";
+            this.selectLisaFolderButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.selectLisaFolderButton.UseVisualStyleBackColor = true;
+            this.selectLisaFolderButton.Click += new System.EventHandler(this.selectLisaFolderButton_Click);
             // 
             // explanationText
             // 
@@ -50,26 +50,26 @@
             this.explanationText.Location = new System.Drawing.Point(13, 42);
             this.explanationText.Name = "explanationText";
             this.explanationText.Size = new System.Drawing.Size(863, 271);
-            this.explanationText.TabIndex = 1;
+            this.explanationText.TabIndex = 3;
             this.explanationText.Text = "";
             // 
-            // EmguTrainerForm
+            // EmguTesterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(888, 325);
             this.Controls.Add(this.explanationText);
-            this.Controls.Add(this.selectManualTrainingFolderButton);
-            this.Name = "EmguTrainerForm";
-            this.Text = "Training";
+            this.Controls.Add(this.selectLisaFolderButton);
+            this.Name = "EmguTesterForm";
+            this.Text = "Automatic Testing";
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.FolderBrowserDialog selectManualTrainingFolderDialog;
-        private System.Windows.Forms.Button selectManualTrainingFolderButton;
+        private System.Windows.Forms.Button selectLisaFolderButton;
+        private System.Windows.Forms.FolderBrowserDialog lisaFolderDialog;
         private System.Windows.Forms.RichTextBox explanationText;
     }
 }
