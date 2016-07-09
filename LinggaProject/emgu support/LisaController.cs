@@ -19,6 +19,12 @@ namespace LinggaProject.emgu_support
         Image<Gray, Byte> processedImageG;
         Image<Gray, Byte> processedImageY;
         List<Instance> rangeDetected;
+        EmguBaseForm form;
+
+        public LisaController(EmguBaseForm form)
+        {
+            this.form = form;
+        }
 
         public void extractFromFolder (string folderPath, int limit)
         {
@@ -74,6 +80,16 @@ namespace LinggaProject.emgu_support
 
         private void extractInstanceFiles(string imageFolderPath)
         {
+            // Bersihkan Folder Processing
+            DirectoryInfo di = new DirectoryInfo("Processing");
+
+            foreach (FileInfo file in di.GetFiles()) {
+                file.Delete();
+            }
+            foreach (DirectoryInfo dir in di.GetDirectories()) {
+                dir.Delete(true);
+            }
+
             // JADIKAN TRAFFIC LIGHT FEATURES
             //int nbInstance = 0;
             Image<Bgr, Byte> image = null;
@@ -97,8 +113,8 @@ namespace LinggaProject.emgu_support
 
                     imageFullPath = imageFullPathTemp;
 
-                    Debug.WriteLine("Extracting From: " + imageFullPathTemp);
-                    Debug.WriteLine(instance);
+                    form.addExplanationText("Extracting From: " + imageFullPathTemp, true);
+                    form.addExplanationText(instance.ToString(), true);
                     image = new Image<Bgr, Byte>(imageFullPathTemp);
                     id = 0;
                 }
@@ -147,10 +163,10 @@ namespace LinggaProject.emgu_support
 
         private void extractNegativeInstanceFiles()
         {
-            Debug.WriteLine("Negative Instance");
+            form.addExplanationText("Negative Instance", true);
             string[] processingImages = Directory.GetFiles("Processing\\");
             foreach (string imagePath in processingImages) {
-                Debug.WriteLine("Extracting Negative From: " + imagePath);
+                form.addExplanationText("Extracting Negative From: " + imagePath, true);
                 int id = 0;
 
                 Image<Bgr, Byte> imageBgr = new Image<Bgr, byte>(imagePath);
@@ -244,9 +260,9 @@ namespace LinggaProject.emgu_support
             // Start testing
             Tester tester = new Tester();
             string[] classedFolderPaths = Directory.GetDirectories(classedImageFolderPath);
-            Debug.WriteLine("Processing " + classedFolderPaths.Length + " Folders");
+            form.addExplanationText("Processing " + classedFolderPaths.Length + " Folders", true);
             foreach (string classedFolderPath in classedFolderPaths) {
-                Debug.WriteLine("Processing: " + classedFolderPath);
+                form.addExplanationText("Processing: " + classedFolderPath, true);
 
                 int indexOfSlash = classedFolderPath.LastIndexOf("\\") + 1;
                 string classString = classedFolderPath.Substring(indexOfSlash);
@@ -256,6 +272,8 @@ namespace LinggaProject.emgu_support
                 }
 
                 string[] classedImagePaths = Directory.GetFiles(classedFolderPath);
+
+                form.addExplanationText("  Number of Instances: " + classedImagePaths.Length, true);
 
                 foreach (string classedImagePath in classedImagePaths) {
                     Dictionary<Rectangle, int> classificationResult = tester.imageTestingFromFile(classedImagePath);
@@ -270,8 +288,8 @@ namespace LinggaProject.emgu_support
                 }
             }
 
-            Debug.WriteLine("Precision and Recall");
-            for (int i=0; i<3; i++) {
+            form.addExplanationText("Precision and Recall", true);
+            for (int i=0; i<6; i++) {
                 float precision = 0;
                 float recall = 0;
 
@@ -285,9 +303,11 @@ namespace LinggaProject.emgu_support
                     recall = (float)correctlyClassified[i] / divider;
                 }
 
-                Debug.WriteLine("  " + i + " Instances : " + numberOfInstanceOfClassIndex[i]);
-                Debug.WriteLine("  " + i + " Precision : " + precision);
-                Debug.WriteLine("  " + i + " Recall : " + recall);
+                form.addExplanationText("  " + i + " Instances : " + numberOfInstanceOfClassIndex[i], true);
+                form.addExplanationText("  " + i + " Correctly Classified : " + correctlyClassified[i], true);
+                form.addExplanationText("  " + i + " Incorrectly Classified to : " + incorrectlyClassified[i], true);
+                form.addExplanationText("  " + i + " Precision : " + precision, true);
+                form.addExplanationText("  " + i + " Recall : " + recall, true);
             }
         }
     }

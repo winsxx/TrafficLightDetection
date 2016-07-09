@@ -12,7 +12,7 @@ namespace LinggaProject
 {
     public partial class EmguMLForm : Form
     {
-        TrainerForm trainerForm;
+        EmguTrainerForm trainerForm;
         EmguImageTestForm imageTestForm;
         EmguVideoTestForm videoTestForm;
         MainForm nonEmguMainForm;
@@ -26,7 +26,7 @@ namespace LinggaProject
 
         private void buildClassifierButton_Click(object sender, EventArgs e)
         {
-            trainerForm = new TrainerForm();
+            trainerForm = new EmguTrainerForm();
             trainerForm.Show();
         }
 

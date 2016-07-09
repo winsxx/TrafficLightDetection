@@ -28,10 +28,10 @@
         private void InitializeComponent()
         {
             this.selectLisaFolderButton = new System.Windows.Forms.Button();
-            this.trainExtractedButton = new System.Windows.Forms.Button();
             this.lisaFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.nbInstances = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.explanationText = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // selectLisaFolderButton
@@ -45,17 +45,6 @@
             this.selectLisaFolderButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.selectLisaFolderButton.UseVisualStyleBackColor = true;
             this.selectLisaFolderButton.Click += new System.EventHandler(this.selectLisaFolderButton_Click);
-            // 
-            // trainExtractedButton
-            // 
-            this.trainExtractedButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.trainExtractedButton.Location = new System.Drawing.Point(12, 41);
-            this.trainExtractedButton.Name = "trainExtractedButton";
-            this.trainExtractedButton.Size = new System.Drawing.Size(97, 23);
-            this.trainExtractedButton.TabIndex = 2;
-            this.trainExtractedButton.Text = "Train Extracted";
-            this.trainExtractedButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.trainExtractedButton.UseVisualStyleBackColor = true;
             // 
             // nbInstances
             // 
@@ -75,14 +64,23 @@
             this.label1.Text = "Instances";
             this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
+            // explanationText
+            // 
+            this.explanationText.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.explanationText.Location = new System.Drawing.Point(12, 42);
+            this.explanationText.Name = "explanationText";
+            this.explanationText.Size = new System.Drawing.Size(863, 271);
+            this.explanationText.TabIndex = 5;
+            this.explanationText.Text = "";
+            // 
             // EmguExtractLisaForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.ClientSize = new System.Drawing.Size(888, 325);
+            this.Controls.Add(this.explanationText);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.nbInstances);
-            this.Controls.Add(this.trainExtractedButton);
             this.Controls.Add(this.selectLisaFolderButton);
             this.Name = "EmguExtractLisaForm";
             this.Text = "EmguExtractLisaForm";
@@ -94,9 +92,9 @@
         #endregion
 
         private System.Windows.Forms.Button selectLisaFolderButton;
-        private System.Windows.Forms.Button trainExtractedButton;
         private System.Windows.Forms.FolderBrowserDialog lisaFolderDialog;
         private System.Windows.Forms.TextBox nbInstances;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.RichTextBox explanationText;
     }
 }

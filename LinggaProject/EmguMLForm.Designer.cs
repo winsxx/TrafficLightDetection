@@ -51,7 +51,7 @@
             this.buildClassifierButton.Name = "buildClassifierButton";
             this.buildClassifierButton.Size = new System.Drawing.Size(206, 23);
             this.buildClassifierButton.TabIndex = 1;
-            this.buildClassifierButton.Text = "Build SVM Classifier Using Manual Data";
+            this.buildClassifierButton.Text = "Build Classifier Using Manual Data";
             this.buildClassifierButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buildClassifierButton.UseVisualStyleBackColor = true;
             this.buildClassifierButton.Click += new System.EventHandler(this.buildClassifierButton_Click);

@@ -11,13 +11,13 @@ using System.Windows.Forms;
 
 namespace LinggaProject
 {
-    public partial class EmguExtractLisaForm : Form
+    public partial class EmguExtractLisaForm : EmguBaseForm
     {
         LisaController lisaController;
         public EmguExtractLisaForm()
         {
             InitializeComponent();
-            lisaController = new LisaController();
+            lisaController = new LisaController(this);
         }
 
         private void selectLisaFolderButton_Click(object sender, EventArgs e)
@@ -26,7 +26,30 @@ namespace LinggaProject
             DialogResult result = lisaFolderDialog.ShowDialog();
             if (result == DialogResult.OK) // Test result.
             {
-                lisaController.extractFromFolder(lisaFolderDialog.SelectedPath, int.Parse(nbInstances.Text));
+                BackgroundWorker bw = new BackgroundWorker();
+                bw.DoWork += (send, args) => {
+                    setElementStatus(selectLisaFolderButton, false);
+                    lisaController.extractFromFolder(lisaFolderDialog.SelectedPath, int.Parse(nbInstances.Text));
+                };
+                bw.RunWorkerCompleted += (send, args) => {
+                    setElementStatus(selectLisaFolderButton, true);
+                };
+
+                bw.RunWorkerAsync();
+            }
+        }
+
+        public override void addExplanationText(string text, bool isAppend)
+        {
+            if (InvokeRequired) {
+                this.Invoke(new Action<string, bool>(addExplanationText), new object[] { text, isAppend });
+                return;
+            }
+
+            if (isAppend) {
+                explanationText.AppendText(Environment.NewLine + text);
+            } else {
+                explanationText.Text = text;
             }
         }
     }

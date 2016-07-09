@@ -29,6 +29,7 @@
         {
             this.selectLisaFolderButton = new System.Windows.Forms.Button();
             this.lisaFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.explanationText = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // selectLisaFolderButton
@@ -43,11 +44,21 @@
             this.selectLisaFolderButton.UseVisualStyleBackColor = true;
             this.selectLisaFolderButton.Click += new System.EventHandler(this.selectLisaFolderButton_Click);
             // 
+            // explanationText
+            // 
+            this.explanationText.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.explanationText.Location = new System.Drawing.Point(13, 42);
+            this.explanationText.Name = "explanationText";
+            this.explanationText.Size = new System.Drawing.Size(863, 271);
+            this.explanationText.TabIndex = 3;
+            this.explanationText.Text = "";
+            // 
             // EmguTestLisaForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.ClientSize = new System.Drawing.Size(888, 325);
+            this.Controls.Add(this.explanationText);
             this.Controls.Add(this.selectLisaFolderButton);
             this.Name = "EmguTestLisaForm";
             this.Text = "EmguTestLisaForm";
@@ -59,5 +70,6 @@
 
         private System.Windows.Forms.Button selectLisaFolderButton;
         private System.Windows.Forms.FolderBrowserDialog lisaFolderDialog;
+        private System.Windows.Forms.RichTextBox explanationText;
     }
 }

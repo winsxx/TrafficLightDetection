@@ -51,7 +51,20 @@ namespace LinggaProject
                     // only print detected
                     CvInvoke.Rectangle(img, rect, color.MCvScalar, 1, LineType.FourConnected);
                 }
+
                 testImageBox.Image = img;
+
+                //Image<Bgr, Byte> imgBgr = new Image<Bgr, byte>(testImageDialog.FileName);
+
+                //Image<Gray, Byte> imgR = imgBgr.InRange(new Bgr(0, 0, 200),
+                //                              new Bgr(100, 100, 256));
+                //Image<Gray, Byte> imgY = imgBgr.InRange(new Bgr(0, 100, 200),
+                //                                new Bgr(80, 256, 256));
+                //Image<Gray, Byte> imgG = imgBgr.InRange(new Bgr(150, 150, 0),
+                //                                new Bgr(256, 256, 80));
+                //Image<Gray, Byte> imgPro = imgR + imgY + imgG;
+
+                //testImageBox.Image = imgPro;
             }
         }
     }
