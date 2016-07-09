@@ -155,7 +155,7 @@
     <Compile Include="TrafficLightColorSegmentation\TrafficLightColorSegmentation.cs" />
     <Compile Include="TrafficLightColorSegmentation\TrafficLightColorType.cs" />
     <Compile Include="TrafficLightElimination\TrafficLightEliminationBySimpleSize.cs" />
-    <Compile Include="TrafficLightElimination\TrafficLightEliminationBySize.cs" />
+    <Compile Include="TrafficLightElimination\TrafficLightEliminationByPosition.cs" />
     <Compile Include="TrafficLightShapeClassifier\HOGTrafficLightShapeClassifier.cs" />
     <Compile Include="TrafficLightShapeClassifier\TrafficLightShapeClassifier.cs" />
     <Compile Include="TrafficLightColorSegmentation\TrafficLightSegmentationResult.cs" />
