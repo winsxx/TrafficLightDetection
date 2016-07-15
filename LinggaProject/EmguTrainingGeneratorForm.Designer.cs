@@ -1,6 +1,6 @@
 ﻿namespace LinggaProject
 {
-    partial class EmguAutomatedTestForm
+    partial class EmguTrainingGeneratorForm
     {
         /// <summary>
         /// Required designer variable.
@@ -37,9 +37,9 @@
             this.selectLisaFolderButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.selectLisaFolderButton.Location = new System.Drawing.Point(12, 12);
             this.selectLisaFolderButton.Name = "selectLisaFolderButton";
-            this.selectLisaFolderButton.Size = new System.Drawing.Size(109, 23);
+            this.selectLisaFolderButton.Size = new System.Drawing.Size(130, 23);
             this.selectLisaFolderButton.TabIndex = 2;
-            this.selectLisaFolderButton.Text = "Test From Folder";
+            this.selectLisaFolderButton.Text = "Generate From Folder";
             this.selectLisaFolderButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.selectLisaFolderButton.UseVisualStyleBackColor = true;
             this.selectLisaFolderButton.Click += new System.EventHandler(this.selectLisaFolderButton_Click);

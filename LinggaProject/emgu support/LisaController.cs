@@ -310,6 +310,56 @@ namespace LinggaProject.emgu_support
                 form.addExplanationText("  " + i + " Recall : " + recall, true);
             }
         }
+
+        public void randomPick(string parentDirectory)
+        {
+            DirectoryInfo extractedDir = new DirectoryInfo(parentDirectory + "/Extracted");
+            DirectoryInfo randomizedDir = new DirectoryInfo(parentDirectory + "/Randomized");
+            int[] classSubsetSizes = new int[3];
+
+            // Bersihkan folder randomized
+            foreach (DirectoryInfo dir in randomizedDir.GetDirectories()) {
+                dir.Delete(true);
+            }
+
+            foreach (DirectoryInfo dir in extractedDir.GetDirectories()) {
+                form.addExplanationText("Processing Class: " + dir.Name, true);
+
+                // Taruh semua file per kelas di list
+                List<FileInfo> files = new List<FileInfo>();
+                FileInfo[] fileInfos = dir.GetFiles();
+
+                int dirNameInt = Int32.Parse(dir.Name);
+                if (dirNameInt < 3) {
+                    int size = (int)(fileInfos.Count() * GlobalConstant.RANDOM_TRAINING_SUBSET_SIZE);
+                    if (size < GlobalConstant.RANDOM_TRAINING_SUBSET_MIN_SIZE) {
+                        size = GlobalConstant.RANDOM_TRAINING_SUBSET_MIN_SIZE;
+                    }
+                    classSubsetSizes[dirNameInt] = size;
+                }
+                int subsetSize = classSubsetSizes[dirNameInt % 3];
+
+                foreach (FileInfo file in fileInfos) {
+                    form.addExplanationText("  Adding: " + file.Name, true);
+                    files.Add(file);
+                }
+
+                // Ambil secara random
+                Random rnd = new Random();
+                Debug.WriteLine("before randomize: " + files.Count());
+                files = files.OrderBy(x => rnd.Next()).Take(subsetSize).ToList();
+                Debug.WriteLine("after randomize: " + files.Count());
+
+                form.addExplanationText("=====================================", true);
+                // Save ke randomized
+                foreach (FileInfo file in files) {
+                    form.addExplanationText("  Copying: " + file.Name, true);
+                    string classedDirectory = randomizedDir.FullName + "/" + dir.Name;
+                    Directory.CreateDirectory(classedDirectory);
+                    File.Copy(file.FullName, classedDirectory + "/" + file.Name);
+                }
+            }
+        }
     }
 
     class CSVInstance

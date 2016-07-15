@@ -34,6 +34,8 @@
             this.automatedLisaTestButton = new System.Windows.Forms.Button();
             this.imageTestButton = new System.Windows.Forms.Button();
             this.nonEmguButton = new System.Windows.Forms.Button();
+            this.randomizeTrainingSetButton = new System.Windows.Forms.Button();
+            this.extractVideoFrameButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -58,7 +60,7 @@
             // 
             // generateLisaDatasetButton
             // 
-            this.generateLisaDatasetButton.Location = new System.Drawing.Point(15, 113);
+            this.generateLisaDatasetButton.Location = new System.Drawing.Point(15, 84);
             this.generateLisaDatasetButton.Name = "generateLisaDatasetButton";
             this.generateLisaDatasetButton.Size = new System.Drawing.Size(132, 23);
             this.generateLisaDatasetButton.TabIndex = 2;
@@ -69,7 +71,7 @@
             // 
             // videoTestButton
             // 
-            this.videoTestButton.Location = new System.Drawing.Point(15, 84);
+            this.videoTestButton.Location = new System.Drawing.Point(182, 55);
             this.videoTestButton.Name = "videoTestButton";
             this.videoTestButton.Size = new System.Drawing.Size(132, 23);
             this.videoTestButton.TabIndex = 3;
@@ -80,7 +82,7 @@
             // 
             // automatedLisaTestButton
             // 
-            this.automatedLisaTestButton.Location = new System.Drawing.Point(15, 142);
+            this.automatedLisaTestButton.Location = new System.Drawing.Point(181, 84);
             this.automatedLisaTestButton.Name = "automatedLisaTestButton";
             this.automatedLisaTestButton.Size = new System.Drawing.Size(132, 23);
             this.automatedLisaTestButton.TabIndex = 4;
@@ -91,7 +93,7 @@
             // 
             // imageTestButton
             // 
-            this.imageTestButton.Location = new System.Drawing.Point(15, 55);
+            this.imageTestButton.Location = new System.Drawing.Point(181, 26);
             this.imageTestButton.Name = "imageTestButton";
             this.imageTestButton.Size = new System.Drawing.Size(132, 23);
             this.imageTestButton.TabIndex = 5;
@@ -102,7 +104,7 @@
             // 
             // nonEmguButton
             // 
-            this.nonEmguButton.Location = new System.Drawing.Point(15, 171);
+            this.nonEmguButton.Location = new System.Drawing.Point(181, 114);
             this.nonEmguButton.Name = "nonEmguButton";
             this.nonEmguButton.Size = new System.Drawing.Size(132, 23);
             this.nonEmguButton.TabIndex = 6;
@@ -111,11 +113,35 @@
             this.nonEmguButton.UseVisualStyleBackColor = true;
             this.nonEmguButton.Click += new System.EventHandler(this.nonEmguButton_Click);
             // 
+            // randomizeTrainingSetButton
+            // 
+            this.randomizeTrainingSetButton.Location = new System.Drawing.Point(15, 55);
+            this.randomizeTrainingSetButton.Name = "randomizeTrainingSetButton";
+            this.randomizeTrainingSetButton.Size = new System.Drawing.Size(132, 23);
+            this.randomizeTrainingSetButton.TabIndex = 7;
+            this.randomizeTrainingSetButton.Text = "Randomize Training Set";
+            this.randomizeTrainingSetButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.randomizeTrainingSetButton.UseVisualStyleBackColor = true;
+            this.randomizeTrainingSetButton.Click += new System.EventHandler(this.randomizeTrainingSetButton_Click);
+            // 
+            // extractVideoFrameButton
+            // 
+            this.extractVideoFrameButton.Location = new System.Drawing.Point(15, 114);
+            this.extractVideoFrameButton.Name = "extractVideoFrameButton";
+            this.extractVideoFrameButton.Size = new System.Drawing.Size(132, 23);
+            this.extractVideoFrameButton.TabIndex = 8;
+            this.extractVideoFrameButton.Text = "Extract Video Frame";
+            this.extractVideoFrameButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.extractVideoFrameButton.UseVisualStyleBackColor = true;
+            this.extractVideoFrameButton.Click += new System.EventHandler(this.extractVideoFrameButton_Click);
+            // 
             // EmguMLForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(351, 209);
+            this.ClientSize = new System.Drawing.Size(325, 151);
+            this.Controls.Add(this.extractVideoFrameButton);
+            this.Controls.Add(this.randomizeTrainingSetButton);
             this.Controls.Add(this.nonEmguButton);
             this.Controls.Add(this.imageTestButton);
             this.Controls.Add(this.automatedLisaTestButton);
@@ -139,5 +165,7 @@
         private System.Windows.Forms.Button automatedLisaTestButton;
         private System.Windows.Forms.Button imageTestButton;
         private System.Windows.Forms.Button nonEmguButton;
+        private System.Windows.Forms.Button randomizeTrainingSetButton;
+        private System.Windows.Forms.Button extractVideoFrameButton;
     }
 }

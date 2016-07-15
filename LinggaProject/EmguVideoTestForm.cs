@@ -17,6 +17,8 @@ namespace LinggaProject
 {
     public partial class EmguVideoTestForm : EmguBaseForm
     {
+        Timer timer = new Timer();
+        int FPS = 60;
         Capture cap;
         Stopwatch frameTimer;
         Tester tester;
@@ -24,6 +26,7 @@ namespace LinggaProject
 
         public EmguVideoTestForm()
         {
+            timer.Interval = 1000 / FPS;
             InitializeComponent();
             tester = new Tester();
         }
@@ -90,10 +93,14 @@ namespace LinggaProject
                 if (captureInProgress) {  //if camera is getting frames then stop the capture and set button Text
                                           // "Start" for resuming capture
                     //btnStart.Text = "Start!"; //
-                    Application.Idle -= processFrameUpdateGUI;
+
+                    timer.Tick -= new EventHandler(processFrameUpdateGUI);
+                    timer.Stop();
                 } else {
                     addExplanationText("cap not null, capture not in progress.", true);
-                    Application.Idle += processFrameUpdateGUI;
+
+                    timer.Tick += new EventHandler(processFrameUpdateGUI);
+                    timer.Start();
                 }
                 captureInProgress = !captureInProgress;
             }

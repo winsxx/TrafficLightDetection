@@ -17,7 +17,9 @@ namespace LinggaProject
         EmguVideoTestForm videoTestForm;
         MainForm nonEmguMainForm;
         EmguExtractLisaForm extractLisaForm;
-        EmguAutomatedTestForm testLisaForm;
+        EmguTesterForm testLisaForm;
+        EmguTrainingGeneratorForm trainingGeneratorForm;
+        EmguVideoFrameExtractor videoExtractorFrame;
 
         public EmguMLForm()
         {
@@ -56,8 +58,20 @@ namespace LinggaProject
 
         private void automatedLisaTestButton_Click(object sender, EventArgs e)
         {
-            testLisaForm = new EmguAutomatedTestForm();
+            testLisaForm = new EmguTesterForm();
             testLisaForm.Show();
+        }
+
+        private void randomizeTrainingSetButton_Click(object sender, EventArgs e)
+        {
+            trainingGeneratorForm = new EmguTrainingGeneratorForm();
+            trainingGeneratorForm.Show();
+        }
+
+        private void extractVideoFrameButton_Click(object sender, EventArgs e)
+        {
+            videoExtractorFrame = new EmguVideoFrameExtractor();
+            videoExtractorFrame.Show();
         }
     }
 }

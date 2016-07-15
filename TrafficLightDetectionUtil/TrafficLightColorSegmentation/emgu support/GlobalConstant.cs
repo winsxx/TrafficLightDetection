@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LinggaProject.emgu_support
+namespace TrafficLightDetectionUtil.emgu_support
 {
-    class GlobalConstant
+    public class GlobalConstant
     {
         public static int INSTANCE_CELL_WIDTH = 9;
         public static int INSTANCE_CELL_HEIGHT = 9;

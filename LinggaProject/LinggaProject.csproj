@@ -100,6 +100,12 @@
     <Compile Include="EmguTesterForm.Designer.cs">
       <DependentUpon>EmguTesterForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="EmguVideoFrameExtractor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EmguVideoFrameExtractor.Designer.cs">
+      <DependentUpon>EmguVideoFrameExtractor.cs</DependentUpon>
+    </Compile>
     <Compile Include="EmguVideoTestForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -165,6 +171,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="EmguTesterForm.resx">
       <DependentUpon>EmguTesterForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EmguVideoFrameExtractor.resx">
+      <DependentUpon>EmguVideoFrameExtractor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="EmguVideoTestForm.resx">
       <DependentUpon>EmguVideoTestForm.cs</DependentUpon>
