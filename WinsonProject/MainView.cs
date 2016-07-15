@@ -28,7 +28,7 @@ namespace WinsonProject
         private int numOfFrameProcessed;
         private double avgElapsedTime;
 
-        private const int TL_REDETECT_CYCLE = 0;
+        private const int TL_REDETECT_CYCLE = 22;
 
         public MainView()
         {
