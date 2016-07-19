@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.CV.Structure;
+using TrafficLightDetectionUtil;
 
 namespace TrafficLightDetection
 {
@@ -80,7 +81,34 @@ namespace TrafficLightDetection
 
         private void ProcessImage(Image<Bgr, byte> imgOri)
         {
+            TrafficLightColorSegmentation colorSegmentation = new BasicTrafficLightColorSegmentation(5);
+            var result = colorSegmentation.DoColorSegmentation(imgOri);
+            this.DrawResult(result, imgOri);
             Video_Image_1.Image = imgOri.Bitmap;
+        }
+
+        private void DrawResult(TrafficLightSegmentationResult[] tlSegmentationResults, Image<Bgr, byte> drawFrame)
+        {
+            foreach (TrafficLightSegmentationResult tlRect in tlSegmentationResults)
+            {
+                Bgr boxColor;
+                switch (tlRect.ColorLabel)
+                {
+                    case TrafficLightColorType.Yellow:
+                        boxColor = new Bgr(0, 255, 255);
+                        break;
+                    case TrafficLightColorType.Red:
+                        boxColor = new Bgr(0, 0, 255);
+                        break;
+                    case TrafficLightColorType.Green:
+                        boxColor = new Bgr(0, 255, 0);
+                        break;
+                    default:
+                        boxColor = new Bgr(0, 0, 0);
+                        break;
+                }
+                drawFrame.Draw(tlRect.Region, boxColor, -1);
+            }
         }
     }
 }

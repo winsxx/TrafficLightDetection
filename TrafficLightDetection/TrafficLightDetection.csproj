@@ -91,6 +91,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TrafficLightDetectionUtil\TrafficLightDetectionUtil.csproj">
+      <Project>{4b68612d-198b-4ce3-a4b1-58a527437c3d}</Project>
+      <Name>TrafficLightDetectionUtil</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
