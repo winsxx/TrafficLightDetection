@@ -61,6 +61,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="emgu support\EmguBaseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="emgu support\Extractor.cs" />
     <Compile Include="emgu support\GlobalConstant.cs" />
     <Compile Include="emgu support\Instance.cs" />
@@ -85,11 +88,23 @@
     <Compile Include="EmguMLForm.Designer.cs">
       <DependentUpon>EmguMLForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="EmguTestLisaForm.cs">
+    <Compile Include="EmguTrainingGeneratorForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="EmguTestLisaForm.Designer.cs">
-      <DependentUpon>EmguTestLisaForm.cs</DependentUpon>
+    <Compile Include="EmguTrainingGeneratorForm.Designer.cs">
+      <DependentUpon>EmguTrainingGeneratorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EmguTesterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EmguTesterForm.Designer.cs">
+      <DependentUpon>EmguTesterForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EmguVideoFrameExtractor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EmguVideoFrameExtractor.Designer.cs">
+      <DependentUpon>EmguVideoFrameExtractor.cs</DependentUpon>
     </Compile>
     <Compile Include="EmguVideoTestForm.cs">
       <SubType>Form</SubType>
@@ -136,11 +151,11 @@
     <Compile Include="non emgu\support\TrafficLightFeatureExtractor.cs" />
     <Compile Include="non emgu\support\TrafficLightInstance.cs" />
     <Compile Include="non emgu\support\DatasetGenerator.cs" />
-    <Compile Include="TrainerForm.cs">
+    <Compile Include="EmguTrainerForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TrainerForm.Designer.cs">
-      <DependentUpon>TrainerForm.cs</DependentUpon>
+    <Compile Include="EmguTrainerForm.Designer.cs">
+      <DependentUpon>EmguTrainerForm.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="EmguExtractLisaForm.resx">
       <DependentUpon>EmguExtractLisaForm.cs</DependentUpon>
@@ -151,8 +166,14 @@
     <EmbeddedResource Include="EmguMLForm.resx">
       <DependentUpon>EmguMLForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="EmguTestLisaForm.resx">
-      <DependentUpon>EmguTestLisaForm.cs</DependentUpon>
+    <EmbeddedResource Include="EmguTrainingGeneratorForm.resx">
+      <DependentUpon>EmguTrainingGeneratorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EmguTesterForm.resx">
+      <DependentUpon>EmguTesterForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EmguVideoFrameExtractor.resx">
+      <DependentUpon>EmguVideoFrameExtractor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="EmguVideoTestForm.resx">
       <DependentUpon>EmguVideoTestForm.cs</DependentUpon>
@@ -178,8 +199,8 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="TrainerForm.resx">
-      <DependentUpon>TrainerForm.cs</DependentUpon>
+    <EmbeddedResource Include="EmguTrainerForm.resx">
+      <DependentUpon>EmguTrainerForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

@@ -31,6 +31,7 @@
             this.browseVideoButton = new System.Windows.Forms.Button();
             this.testVideoDialog = new System.Windows.Forms.OpenFileDialog();
             this.testVideoBox = new Emgu.CV.UI.ImageBox();
+            this.explanationText = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.testVideoBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -48,20 +49,29 @@
             // 
             this.testVideoBox.Location = new System.Drawing.Point(12, 41);
             this.testVideoBox.Name = "testVideoBox";
-            this.testVideoBox.Size = new System.Drawing.Size(903, 580);
+            this.testVideoBox.Size = new System.Drawing.Size(903, 503);
             this.testVideoBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.testVideoBox.TabIndex = 4;
             this.testVideoBox.TabStop = false;
+            // 
+            // explanationText
+            // 
+            this.explanationText.Location = new System.Drawing.Point(12, 551);
+            this.explanationText.Name = "explanationText";
+            this.explanationText.Size = new System.Drawing.Size(903, 96);
+            this.explanationText.TabIndex = 5;
+            this.explanationText.Text = "";
             // 
             // EmguVideoTestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(927, 633);
+            this.ClientSize = new System.Drawing.Size(927, 658);
+            this.Controls.Add(this.explanationText);
             this.Controls.Add(this.testVideoBox);
             this.Controls.Add(this.browseVideoButton);
             this.Name = "EmguVideoTestForm";
-            this.Text = "EmguVideoTestForm";
+            this.Text = "Video Testing";
             this.Load += new System.EventHandler(this.EmguVideoTestForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.testVideoBox)).EndInit();
             this.ResumeLayout(false);
@@ -72,5 +82,6 @@
         private System.Windows.Forms.Button browseVideoButton;
         private System.Windows.Forms.OpenFileDialog testVideoDialog;
         private Emgu.CV.UI.ImageBox testVideoBox;
+        private System.Windows.Forms.RichTextBox explanationText;
     }
 }

@@ -11,10 +11,10 @@ using System.Windows.Forms;
 
 namespace LinggaProject
 {
-    public partial class EmguExtractLisaForm : EmguBaseForm
+    public partial class EmguTesterForm : EmguBaseForm
     {
         LisaController lisaController;
-        public EmguExtractLisaForm()
+        public EmguTesterForm()
         {
             InitializeComponent();
             lisaController = new LisaController(this);
@@ -22,14 +22,14 @@ namespace LinggaProject
 
         private void selectLisaFolderButton_Click(object sender, EventArgs e)
         {
-            lisaFolderDialog.SelectedPath = "D:\\LISA_TL_dayTrain\\dayClip1";
+            lisaFolderDialog.SelectedPath = "C:\\Users\\jelink\\Documents\\TrafficLightDetection\\LinggaProject\\bin\\Debug\\Extracted";
             DialogResult result = lisaFolderDialog.ShowDialog();
             if (result == DialogResult.OK) // Test result.
             {
                 BackgroundWorker bw = new BackgroundWorker();
                 bw.DoWork += (send, args) => {
                     setElementStatus(selectLisaFolderButton, false);
-                    lisaController.extractFromFolder(lisaFolderDialog.SelectedPath, int.Parse(nbInstances.Text));
+                    lisaController.testFromFolder(lisaFolderDialog.SelectedPath);
                 };
                 bw.RunWorkerCompleted += (send, args) => {
                     setElementStatus(selectLisaFolderButton, true);

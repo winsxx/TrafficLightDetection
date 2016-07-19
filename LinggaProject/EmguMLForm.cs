@@ -12,12 +12,14 @@ namespace LinggaProject
 {
     public partial class EmguMLForm : Form
     {
-        TrainerForm trainerForm;
+        EmguTrainerForm trainerForm;
         EmguImageTestForm imageTestForm;
         EmguVideoTestForm videoTestForm;
         MainForm nonEmguMainForm;
         EmguExtractLisaForm extractLisaForm;
-        EmguTestLisaForm testLisaForm;
+        EmguTesterForm testLisaForm;
+        EmguTrainingGeneratorForm trainingGeneratorForm;
+        EmguVideoFrameExtractor videoExtractorFrame;
 
         public EmguMLForm()
         {
@@ -26,7 +28,7 @@ namespace LinggaProject
 
         private void buildClassifierButton_Click(object sender, EventArgs e)
         {
-            trainerForm = new TrainerForm();
+            trainerForm = new EmguTrainerForm();
             trainerForm.Show();
         }
 
@@ -56,8 +58,20 @@ namespace LinggaProject
 
         private void automatedLisaTestButton_Click(object sender, EventArgs e)
         {
-            testLisaForm = new EmguTestLisaForm();
+            testLisaForm = new EmguTesterForm();
             testLisaForm.Show();
+        }
+
+        private void randomizeTrainingSetButton_Click(object sender, EventArgs e)
+        {
+            trainingGeneratorForm = new EmguTrainingGeneratorForm();
+            trainingGeneratorForm.Show();
+        }
+
+        private void extractVideoFrameButton_Click(object sender, EventArgs e)
+        {
+            videoExtractorFrame = new EmguVideoFrameExtractor();
+            videoExtractorFrame.Show();
         }
     }
 }

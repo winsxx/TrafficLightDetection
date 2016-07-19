@@ -11,32 +11,34 @@ using System.Windows.Forms;
 
 namespace LinggaProject
 {
-    public partial class EmguExtractLisaForm : EmguBaseForm
+    public partial class EmguTrainerForm : EmguBaseForm
     {
-        LisaController lisaController;
-        public EmguExtractLisaForm()
+        Trainer trainer;
+
+        public EmguTrainerForm()
         {
+            trainer = new Trainer(this);
             InitializeComponent();
-            lisaController = new LisaController(this);
         }
 
-        private void selectLisaFolderButton_Click(object sender, EventArgs e)
+        private void selectManualTrainingFolderButton_Click(object sender, EventArgs e)
         {
-            lisaFolderDialog.SelectedPath = "D:\\LISA_TL_dayTrain\\dayClip1";
-            DialogResult result = lisaFolderDialog.ShowDialog();
+            selectManualTrainingFolderDialog.SelectedPath = "C:\\Users\\jelink\\Documents\\TrafficLightDetection\\data\\training\\Real";
+            DialogResult result = selectManualTrainingFolderDialog.ShowDialog();
             if (result == DialogResult.OK) // Test result.
             {
                 BackgroundWorker bw = new BackgroundWorker();
                 bw.DoWork += (send, args) => {
-                    setElementStatus(selectLisaFolderButton, false);
-                    lisaController.extractFromFolder(lisaFolderDialog.SelectedPath, int.Parse(nbInstances.Text));
+                    setElementStatus(selectManualTrainingFolderButton, false);
+                    trainer.manualDatasetGenerate(selectManualTrainingFolderDialog.SelectedPath);
                 };
                 bw.RunWorkerCompleted += (send, args) => {
-                    setElementStatus(selectLisaFolderButton, true);
+                    setElementStatus(selectManualTrainingFolderButton, true);
                 };
 
                 bw.RunWorkerAsync();
             }
+
         }
 
         public override void addExplanationText(string text, bool isAppend)

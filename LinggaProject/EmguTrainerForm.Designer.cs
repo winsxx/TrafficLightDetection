@@ -1,6 +1,6 @@
 ﻿namespace LinggaProject
 {
-    partial class TrainerForm
+    partial class EmguTrainerForm
     {
         /// <summary>
         /// Required designer variable.
@@ -29,6 +29,7 @@
         {
             this.selectManualTrainingFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.selectManualTrainingFolderButton = new System.Windows.Forms.Button();
+            this.explanationText = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // selectManualTrainingFolderButton
@@ -43,14 +44,24 @@
             this.selectManualTrainingFolderButton.UseVisualStyleBackColor = true;
             this.selectManualTrainingFolderButton.Click += new System.EventHandler(this.selectManualTrainingFolderButton_Click);
             // 
-            // TrainerForm
+            // explanationText
+            // 
+            this.explanationText.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.explanationText.Location = new System.Drawing.Point(13, 42);
+            this.explanationText.Name = "explanationText";
+            this.explanationText.Size = new System.Drawing.Size(863, 271);
+            this.explanationText.TabIndex = 1;
+            this.explanationText.Text = "";
+            // 
+            // EmguTrainerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.ClientSize = new System.Drawing.Size(888, 325);
+            this.Controls.Add(this.explanationText);
             this.Controls.Add(this.selectManualTrainingFolderButton);
-            this.Name = "TrainerForm";
-            this.Text = "TrainerForm";
+            this.Name = "EmguTrainerForm";
+            this.Text = "Training";
             this.ResumeLayout(false);
 
         }
@@ -59,5 +70,6 @@
 
         private System.Windows.Forms.FolderBrowserDialog selectManualTrainingFolderDialog;
         private System.Windows.Forms.Button selectManualTrainingFolderButton;
+        private System.Windows.Forms.RichTextBox explanationText;
     }
 }

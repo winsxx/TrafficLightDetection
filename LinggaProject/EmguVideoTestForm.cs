@@ -15,14 +15,18 @@ using System.Windows.Forms;
 
 namespace LinggaProject
 {
-    public partial class EmguVideoTestForm : Form
+    public partial class EmguVideoTestForm : EmguBaseForm
     {
+        Timer timer = new Timer();
+        int FPS = 60;
         Capture cap;
+        Stopwatch frameTimer;
         Tester tester;
         private bool captureInProgress = false;
 
         public EmguVideoTestForm()
         {
+            timer.Interval = 1000 / FPS;
             InitializeComponent();
             tester = new Tester();
         }
@@ -32,7 +36,6 @@ namespace LinggaProject
             DialogResult result = testVideoDialog.ShowDialog();
             if (result == DialogResult.OK) // Test result.
             {
-                Debug.WriteLine("select");
                 cap = new Capture(testVideoDialog.FileName);
             }
         }
@@ -40,6 +43,8 @@ namespace LinggaProject
         void processFrameUpdateGUI (object sender, EventArgs e)
         {
             try {
+                frameTimer = new Stopwatch();
+                frameTimer.Start();
                 Image<Bgr, Byte> img1 = cap.QueryFrame().ToImage<Bgr, Byte>();
                 //testVideoBox.Image = img1;
                 //return;
@@ -67,6 +72,8 @@ namespace LinggaProject
                     CvInvoke.Rectangle(img, rect, color.MCvScalar, 1);
                 }
                 testVideoBox.Image = img;
+                string elapsed = "Classify time: " + frameTimer.ElapsedMilliseconds;
+                addExplanationText(elapsed, true);
             } catch (Exception ex) {
                 Debug.WriteLine(ex.StackTrace);
             }
@@ -86,15 +93,30 @@ namespace LinggaProject
                 if (captureInProgress) {  //if camera is getting frames then stop the capture and set button Text
                                           // "Start" for resuming capture
                     //btnStart.Text = "Start!"; //
-                    Application.Idle -= processFrameUpdateGUI;
+
+                    timer.Tick -= new EventHandler(processFrameUpdateGUI);
+                    timer.Stop();
                 } else {
-                    Debug.WriteLine("cap not null, capture not in progress.");
-                    //if camera is NOT getting frames then start the capture and set button
-                    // Text to "Stop" for pausing capture
-                    //btnStart.Text = "Stop";
-                    Application.Idle += processFrameUpdateGUI;
+                    addExplanationText("cap not null, capture not in progress.", true);
+
+                    timer.Tick += new EventHandler(processFrameUpdateGUI);
+                    timer.Start();
                 }
                 captureInProgress = !captureInProgress;
+            }
+        }
+
+        public override void addExplanationText(string text, bool isAppend)
+        {
+            if (InvokeRequired) {
+                this.Invoke(new Action<string, bool>(addExplanationText), new object[] { text, isAppend });
+                return;
+            }
+
+            if (isAppend) {
+                explanationText.AppendText(Environment.NewLine + text);
+            } else {
+                explanationText.Text = text;
             }
         }
     }

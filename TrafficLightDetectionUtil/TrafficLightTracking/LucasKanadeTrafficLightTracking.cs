@@ -38,9 +38,24 @@ namespace TrafficLightDetectionUtil
             foreach (TrafficLightSegmentationResult prevResult in prevBoundingBox)
             {
                 #region feature detection
-                CvInvoke.Rectangle(mask, prevResult.Region, new MCvScalar(255, 255, 255));
+                var padWidth = prevResult.Region.Width * 20/100;
+                var padHeight = prevResult.Region.Height * 20/100;
+
+                #region give padding
+                int left = prevResult.Region.Left - padWidth;
+                if (left < 0) left = 0;
+                int top = prevResult.Region.Top - padHeight;
+                if (top < 0) top = 0;
+                int right = prevResult.Region.Right + padWidth;
+                if (right >= prevFrame.Width) right = prevFrame.Width - 1;
+                int bottom = prevResult.Region.Bottom + padHeight;
+                if (top >= prevFrame.Height) bottom = prevFrame.Height - 1;
+                Rectangle maskRegion = new Rectangle(left, top, right - left + 1, bottom - top + 1);
+                #endregion
+
+                CvInvoke.Rectangle(mask, maskRegion, new MCvScalar(255, 255, 255));
                 MKeyPoint[] keyPoints = _featureDetector.Detect(prevGrayFrame, mask: mask);
-                CvInvoke.Rectangle(mask, prevResult.Region, new MCvScalar(0, 0, 0));
+                CvInvoke.Rectangle(mask, maskRegion, new MCvScalar(0, 0, 0));
                 List<PointF> pointList = new List<PointF>();
                 foreach (MKeyPoint keypoint in keyPoints)
                 {

@@ -1,18 +1,17 @@
-﻿using Emgu.CV;
-using Emgu.CV.Structure;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using Emgu.CV.ML;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.ComponentModel;
+using TrafficLightDetectionUtil.emgu_support;
+using Emgu.CV;
+using Emgu.CV.Structure;
+using Emgu.CV.ML;
+using System.Drawing;
 
-namespace LinggaProject.emgu_support
+namespace TrafficLightDetectionUtil
 {
-    class Tester
+    public class TrafficLightColorSegmentationUsingML : TrafficLightColorSegmentation
     {
         Image<Hsv, Byte> originalImage;
         Image<Hsv, Byte> processedImage;
@@ -25,7 +24,7 @@ namespace LinggaProject.emgu_support
         IStatModel yellowModel;
         IStatModel model;
 
-        public Tester()
+        public TrafficLightColorSegmentationUsingML()
         {
             // Initialization
             rangeDetected = new List<Instance>();
@@ -64,6 +63,39 @@ namespace LinggaProject.emgu_support
                 FileStorage fsr = new FileStorage(GlobalConstant.CLASSIFIER_TYPE + "_model.xml", FileStorage.Mode.Read);
                 model.Read(fsr.GetFirstTopLevelNode());
             }
+        }
+
+
+        public TrafficLightSegmentationResult[] DoColorSegmentation(Image<Bgr, byte> image)
+        {
+            Image<Hsv, byte> imageHsv = image.Convert<Hsv, byte>();
+            Dictionary<Rectangle, int> rawResults = imageTesting(imageHsv);
+            TrafficLightSegmentationResult[] results = new TrafficLightSegmentationResult[rawResults.Count];
+
+            int i = 0;
+            foreach (KeyValuePair<Rectangle, int> rawResult in rawResults) {
+                if (rawResult.Value < 3) {
+                    TrafficLightSegmentationResult result = new TrafficLightSegmentationResult();
+                    switch (rawResult.Value) {
+                        case 0:
+                            result.ColorLabel = TrafficLightColorType.Red;
+                            break;
+                        case 1:
+                            result.ColorLabel = TrafficLightColorType.Green;
+                            break;
+                        case 2:
+                            result.ColorLabel = TrafficLightColorType.Yellow;
+                            break;
+                    }
+                    result.Region = rawResult.Key;
+                    results[i] = result;
+                }
+                else {
+                    // not a traffic light
+                }
+                i++;
+            }
+            return results;
         }
 
         public Dictionary<Rectangle, int> imageTesting(Image<Hsv, Byte> originalImage)
@@ -163,7 +195,7 @@ namespace LinggaProject.emgu_support
             return processedImageY.Data[iy, ix, 0] > 100;// && !processedImage[iy, ix].Equals(GlobalConstant.BLANK);
         }
 
-        private Dictionary<Rectangle, int> classifyRangeDetected (List<Instance> rangeDetected)
+        private Dictionary<Rectangle, int> classifyRangeDetected(List<Instance> rangeDetected)
         {
             Dictionary<Rectangle, int> classifiedRange = new Dictionary<Rectangle, int>();
 
