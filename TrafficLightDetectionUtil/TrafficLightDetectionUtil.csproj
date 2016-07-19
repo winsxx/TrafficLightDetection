@@ -157,9 +157,11 @@
     <Compile Include="TrafficLightElimination\TrafficLightEliminationBySimpleSize.cs" />
     <Compile Include="TrafficLightElimination\TrafficLightEliminationByPosition.cs" />
     <Compile Include="TrafficLightShapeClassifier\HOGTrafficLightShapeClassifier.cs" />
+    <Compile Include="TrafficLightShapeClassifier\TrafficLightRecognitionResult.cs" />
     <Compile Include="TrafficLightShapeClassifier\TrafficLightShapeClassifier.cs" />
     <Compile Include="TrafficLightColorSegmentation\TrafficLightSegmentationResult.cs" />
     <Compile Include="TrafficLightElimination\TrafficLightElimination.cs" />
+    <Compile Include="TrafficLightShapeClassifier\TrafficLightShapeType.cs" />
     <Compile Include="TrafficLightTracking\LucasKanadeTrafficLightTracking.cs" />
     <Compile Include="TrafficLightTracking\MeanShiftTrafficLightTracking.cs" />
     <Compile Include="TrafficLightTracking\TrafficLightTracking.cs" />
