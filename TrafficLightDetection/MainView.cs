@@ -66,7 +66,7 @@ namespace TrafficLightDetection
 
         private void ProcessVideo(object sender, EventArgs e)
         {
-            Image<Bgr, byte> imgOri = cap.QueryFrame().ToImage<Bgr, Byte>();
+            Image<Bgr, byte> imgOri = cap.QueryFrame().ToImage<Bgr, byte>();
 
             if (imgOri != null)
             {
